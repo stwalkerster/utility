@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Utility
+namespace Utility.Interaction
 {
     /// <summary>
     /// Uses a console-based menu system to allow the user to choose from a set of options

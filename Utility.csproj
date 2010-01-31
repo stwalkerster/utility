@@ -45,9 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleMenu.cs" />
-    <Compile Include="ConsoleMenuItem.cs" />
-    <Compile Include="LinkList.cs" />
+    <Compile Include="Interaction\ConsoleMenu.cs" />
+    <Compile Include="Interaction\ConsoleMenuItem.cs" />
+    <Compile Include="DataStructures\LinkList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

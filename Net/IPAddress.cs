@@ -10,10 +10,10 @@ namespace Utility.Net
     {
         public static System.Net.IPAddress newFromString( string ipText )
         {
-            //if( ipText == string.Empty )
-            //    return null;
-            //if( ipText.Contains( '/' ) )
-            //    return null;
+            if( ipText == string.Empty )
+                return null;
+            if( ipText.Contains( '/' ) )
+                return null;
 
             //string[ ] ipOctets = ipText.Split( '.' );
             //byte[ ] ipAddr = new byte[ 4 ];
@@ -34,7 +34,13 @@ namespace Utility.Net
 
         public static string getReversedIpString(System.Net.IPAddress ipAddress)
         {
-            return new System.Net.IPAddress((byte[])ipAddress.GetAddressBytes( ).Reverse( )).ToString();
+            byte[ ] ipForward = ipAddress.GetAddressBytes( );
+            byte[ ] ipReverse = new byte[ 4 ];
+            ipReverse[ 0 ] = ipForward[ 3 ];
+            ipReverse[ 1 ] = ipForward[ 2 ];
+            ipReverse[ 2 ] = ipForward[ 1 ];
+            ipReverse[ 3 ] = ipForward[ 0 ];
+            return new System.Net.IPAddress(ipReverse).ToString();
         }
     }
 }

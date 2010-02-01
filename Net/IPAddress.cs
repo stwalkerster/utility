@@ -10,24 +10,31 @@ namespace Utility.Net
     {
         public static System.Net.IPAddress newFromString( string ipText )
         {
-            if( ipText == string.Empty )
-                return null;
-            if( ipText.Contains( '/' ) )
-                return null;
+            //if( ipText == string.Empty )
+            //    return null;
+            //if( ipText.Contains( '/' ) )
+            //    return null;
 
-            string[ ] ipOctets = ipText.Split( '.' );
-            byte[ ] ipAddr = new byte[ 4 ];
-            for( int i = 0; i < 4; i++ )
-            {
-                ipAddr[ i ] = byte.Parse( ipOctets[ i ], System.Globalization.NumberStyles.Integer );
-            }
+            //string[ ] ipOctets = ipText.Split( '.' );
+            //byte[ ] ipAddr = new byte[ 4 ];
+            //for( int i = 0; i < 4; i++ )
+            //{
+            //    ipAddr[ i ] = byte.Parse( ipOctets[ i ], System.Globalization.NumberStyles.Integer );
+            //}
 
-           return new System.Net.IPAddress( ipAddr );
+            //return new System.Net.IPAddress( ipAddr );
+
+            return System.Net.IPAddress.Parse( ipText );
         }
 
         public static System.Net.IPAddress newFromEncodedString( byte[ ] IPv4Address )
         {
             return newFromString( ASCIIEncoding.ASCII.GetString( IPv4Address ) );
+        }
+
+        public static string getReversedIpString(System.Net.IPAddress ipAddress)
+        {
+            return new System.Net.IPAddress((byte[])ipAddress.GetAddressBytes( ).Reverse( )).ToString();
         }
     }
 }

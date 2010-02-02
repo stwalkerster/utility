@@ -578,6 +578,10 @@ namespace Utility.Net.Chat
                 {
                     _ThreadIsAlive = false;
                 }
+                catch( Exception )
+                {
+                    _ThreadIsAlive = false;
+                }
             }
             while( _ThreadIsAlive );
         }
@@ -613,6 +617,10 @@ namespace Utility.Net.Chat
                 {
                     _ThreadIsAlive = false;
                     _sendQ.Clear( );
+                }
+                catch( Exception )
+                {
+                    _ThreadIsAlive = false;
                 }
             }
             while( _ThreadIsAlive && _ircReaderThread.IsAlive );

@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DotHmbotConfigurationFile.cs" />
     <Compile Include="Interaction\ConsoleMenu.cs" />
     <Compile Include="Interaction\ConsoleMenuItem.cs" />
     <Compile Include="DataStructures\LinkList.cs" />

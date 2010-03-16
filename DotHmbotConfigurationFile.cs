@@ -12,8 +12,6 @@ namespace Utility
 
         public DotHmbotConfigurationFile( string filename )
         {
-            try
-            {
                 StreamReader settingsreader = new StreamReader( filename );
                 mySqlServerHostname = settingsreader.ReadLine( );
                 mySqlServerPort = uint.Parse( settingsreader.ReadLine( ) );
@@ -21,12 +19,10 @@ namespace Utility
                 mySqlPassword = settingsreader.ReadLine( );
                 mySqlSchema = settingsreader.ReadLine( );
                 settingsreader.Close( );
-            }
-            catch( Exception )
-            {
-            }
         }
-
+        private DotHmbotConfigurationFile( )
+        {
+        }
         public void save( string filename )
         {
             StreamWriter sw = new StreamWriter( filename );
@@ -35,6 +31,7 @@ namespace Utility
             sw.WriteLine( mySqlUsername );
             sw.WriteLine( mySqlPassword );
             sw.WriteLine( mySqlSchema );
+            sw.Close( );
         }
 
         public string mySqlServerHostname
@@ -91,6 +88,21 @@ namespace Utility
             {
                 db = value;
             }
+        }
+
+        public static DotHmbotConfigurationFile Create( string filename, string serverHostname, uint serverPort,
+                                                string username, string password, string schema )
+        {
+            DotHmbotConfigurationFile x = new DotHmbotConfigurationFile( );
+            x.mySqlPassword = password;
+            x.mySqlSchema = schema;
+            x.mySqlServerHostname = serverHostname;
+            x.mySqlServerPort = serverPort;
+            x.mySqlUsername = username;
+
+            x.save( filename );
+
+            return new DotHmbotConfigurationFile( filename );
         }
     }
 }

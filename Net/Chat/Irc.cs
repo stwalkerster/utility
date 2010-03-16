@@ -224,9 +224,11 @@ namespace Utility.Net.Chat
 
                 ThreadStart _ircReaderThreadStart = new ThreadStart( _ircReaderThreadMethod );
                 _ircReaderThread = new Thread( _ircReaderThreadStart );
+                _ircReaderThread.Name = "ircReaderThread";
 
                 ThreadStart _ircWriterThreadStart = new ThreadStart( _ircWriterThreadMethod );
                 _ircWriterThread = new Thread( _ircWriterThreadStart );
+                _ircWriterThread.Name = "ircWriterThread";
 
                 _ircReaderThread.Start( );
                 _ircWriterThread.Start( );
@@ -577,10 +579,12 @@ namespace Utility.Net.Chat
                 catch( ThreadAbortException ex )
                 {
                     _ThreadIsAlive = false;
+                    Log( ex.ToString( ) );
                 }
-                catch( Exception )
+                catch( Exception ex)
                 {
                     _ThreadIsAlive = false;
+                    Log( ex.ToString( ) );
                 }
             }
             while( _ThreadIsAlive );
@@ -617,10 +621,12 @@ namespace Utility.Net.Chat
                 {
                     _ThreadIsAlive = false;
                     _sendQ.Clear( );
+                    Log( ex.ToString( ) );
                 }
-                catch( Exception )
+                catch( Exception ex)
                 {
                     _ThreadIsAlive = false;
+                    Log( ex.ToString( ) );
                 }
             }
             while( _ThreadIsAlive && _ircReaderThread.IsAlive );

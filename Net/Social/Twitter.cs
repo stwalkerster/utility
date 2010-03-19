@@ -7,15 +7,16 @@ using System.IO;
 
 namespace Utility.Net.Social
 {
-    class Twitter
+   public class Twitter
     {
         public Twitter( string username, string password)
         {
             _username = username;
             _password = password;
+            _ua = "Utility/0.1 (TwitterClient +http://svn.helpmebot.org.uk:3690/svn/utility)";
         }
 
-        string _username, _password;
+        string _username, _password, _ua;
 
         public string twitterUsername
         {
@@ -37,6 +38,18 @@ namespace Utility.Net.Social
             set
             {
                 _password = value;
+            }
+        }
+
+        public string userAgent
+        {
+            get
+            {
+                return _ua;
+            }
+            set
+            {
+                _ua = value;
             }
         }
 
@@ -90,7 +103,7 @@ namespace Utility.Net.Social
             HttpWebRequest wr = (HttpWebRequest)WebRequest.Create( url );
             wr.Credentials = new NetworkCredential( twitterUsername, twitterPassword );
             wr.Method = "POST";
-            wr.UserAgent = "Utility/0.1 (TwitterClient +http://svn.helpmebot.org.uk:3690/svn/utility)";
+            wr.UserAgent = this.userAgent;
 
             
             wr.ContentType = "application/x-www-form-urlencoded";

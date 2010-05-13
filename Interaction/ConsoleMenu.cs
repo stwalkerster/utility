@@ -33,13 +33,13 @@ namespace Utility.Interaction
         /// </summary>
         /// <param name="shortName">A short name for the item. This is returned when the user makes a choice.</param>
         /// <param name="description">A description of the item</param>
-        public void addItem( string shortName, string description )
+        public void addItem( string shortName, string description, Delegate optionHandler )
         {
             if( description == null )
             {
                 description = string.Empty;
             }
-            menuItems.Add( new ConsoleMenuItem( shortName, description ) );
+            menuItems.Add( new ConsoleMenuItem( shortName, description, optionHandler ) );
             if( menuItems.Count == 1 )
             {
                 selectedKey = shortName;
@@ -56,7 +56,7 @@ namespace Utility.Interaction
         /// Run the menu.
         /// </summary>
         /// <returns>The short name of the chosen item.</returns>
-        public string runMenu( )
+        public void runMenu( )
         {
             Console.ResetColor( );
             Console.Title = title;
@@ -88,7 +88,11 @@ namespace Utility.Interaction
                         break;
                 }
             }
-            return choice;
+            foreach( ConsoleMenuItem item in menuItems )
+            {
+                if( item.Key == choice )
+                    item.Handler.DynamicInvoke( );
+            }
         }
 
         private void showMenu( )

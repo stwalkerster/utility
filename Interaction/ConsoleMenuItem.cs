@@ -9,11 +9,13 @@ namespace Utility.Interaction
     {
         string shortName;
         string description;
+        Delegate optionHandler;
 
-        public ConsoleMenuItem(string shortName, string description )
+        public ConsoleMenuItem(string shortName, string description, Delegate optionHandler )
         {
             this.shortName = shortName;
             this.description = description;
+            this.optionHandler = optionHandler;
         }
 
         public string Key
@@ -37,6 +39,14 @@ namespace Utility.Interaction
             set
             {
                 description = value;
+            }
+        }
+
+        public Delegate Handler
+        {
+            get
+            {
+                return optionHandler;
             }
         }
 

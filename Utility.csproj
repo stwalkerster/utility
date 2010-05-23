@@ -58,6 +58,7 @@
     <Compile Include="DataStructures\LinkList.cs" />
     <Compile Include="Net\Chat\Irc.cs" />
     <Compile Include="Net\IPAddress.cs" />
+    <Compile Include="Net\Monitoring\Nagios\MonitorService.cs" />
     <Compile Include="Net\Social\Twitter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

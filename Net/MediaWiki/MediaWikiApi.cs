@@ -12,86 +12,156 @@ namespace Utility.Net.MediaWiki
 {
     public class MediaWikiApi
     {
-        string apiBase = "http://en.wikipedia.org/w/api.php";
+        WebClient wc ;
 
-        CookieContainer cookieJar = new CookieContainer();
+#region Constants
+       public const int ACTION_EDIT_EXISTS_DOESEXIST = 1;
+       public const int ACTION_EDIT_EXISTS_NOCHECK = 0;
+       public const int ACTION_EDIT_EXISTS_NOTEXIST = -1;
+
+       public const int ACTION_EDIT_TEXT_PREPEND = -1;
+       public const int ACTION_EDIT_TEXT_REPLACE = 0;
+       public const int ACTION_EDIT_TEXT_APPEND = 1;
+
+       public const int ACTION_EDIT_SECTION_NEW = -2;
+       public const int ACTION_EDIT_SECTION_ALL = -1;
+#endregion
+
+        string editToken = "+\\";
+        string editTokenTimestamp = "1970-01-01T00:00:00Z";
 
         public MediaWikiApi()
         {
-              
+              wc= new WebClient("http://en.wikipedia.org/w/api.php");
         }
         public MediaWikiApi(string apiBase)
         {
-            this.apiBase = apiBase;
+            wc= new WebClient(apiBase);
         }
 
         public void Login(string username, string password)
         {
             NameValueCollection vals = new NameValueCollection();
             vals.Add("lgpassword", password);
-            Stream data = sendHttpPost(new WebHeaderCollection(), vals, "action=login&lgname=Stwalkerbot&lgpassword="+password);
+            Stream data = wc.sendHttpPost(new WebHeaderCollection(), vals, "action=login&lgname=Stwalkerbot&lgpassword="+password);
 
-            XPathDocument xDoc = new XPathDocument(data);
-            XPathNavigator xNavigator = xDoc.CreateNavigator();
-            XmlNamespaceManager xNamespace = new XmlNamespaceManager(xNavigator.NameTable);
-            XPathNodeIterator xInterator = xNavigator.Select("//login");
+            XmlNamespaceManager xNamespace;
+            XPathNodeIterator xIterator = getIterator(data, "//login", out xNamespace);
 
             string token = "";
-            xInterator.MoveNext();
+            xIterator.MoveNext();
 
-            string result = xInterator.Current.GetAttribute("result", xNamespace.DefaultNamespace);
+            string result = xIterator.Current.GetAttribute("result", xNamespace.DefaultNamespace);
             if (result == "NeedToken")
-                token = xInterator.Current.GetAttribute("token", xNamespace.DefaultNamespace);
+            {
+                token = xIterator.Current.GetAttribute("token", xNamespace.DefaultNamespace);
 
-            data = sendHttpPost(new WebHeaderCollection(), vals, "action=login&lgname=Stwalkerbot&lgtoken=" + token + "&lgpassword=" + password);
+                data = wc.sendHttpPost(new WebHeaderCollection(), vals, "action=login&lgname=Stwalkerbot&lgtoken=" + token + "&lgpassword=" + password);
 
-            xDoc = new XPathDocument(data);
-            xNavigator = xDoc.CreateNavigator();
-            xNamespace = new XmlNamespaceManager(xNavigator.NameTable);
-            xInterator = xNavigator.Select("//login");
-            xInterator.MoveNext();
+                xIterator = getIterator(data, "//login");
+                xIterator.MoveNext();
 
-            result = xInterator.Current.GetAttribute("result", xNamespace.DefaultNamespace);
+                result = xIterator.Current.GetAttribute("result", xNamespace.DefaultNamespace);
+            }
 
             if (result != "Success")
                 throw new MediaWikiException("Login failed: " + result);
         }
 
-        private Stream sendHttpPost(WebHeaderCollection headers, NameValueCollection postValues, string queryString)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="title">article to edit</param>
+        /// <param name="text">new text to insert</param>
+        /// <param name="summary">edit summary, or section title if section=ACTION_EDIT_SECTION_NEW</param>
+        /// <param name="exists">What to do if the article exists.</param>
+        /// <param name="minor">flag as a minor edit</param>
+        /// <param name="bot">flag as a bot edit</param>
+        /// <param name="location">Where to put the text</param>
+        /// <param name="section">section to edit</param>
+        public void Edit(string title, string text, string summary, int exists, bool minor, bool bot, int location, int section)
         {
-            System.Net.ServicePointManager.Expect100Continue = false;
+            EditToken t = EditToken.Get(wc, title);
 
-            HttpWebRequest hrq = WebRequest.Create(apiBase + "?format=xml&" + queryString) as HttpWebRequest;
+            NameValueCollection vals = new NameValueCollection();
+            if (section != ACTION_EDIT_SECTION_ALL)
+            {
+                if (section == ACTION_EDIT_SECTION_NEW)
+                    vals.Add("section", "new");
+                else
+                    vals.Add("section", section.ToString());
+
+            }
+
+
+     
+
+            vals.Add("summary", summary);
+            vals.Add("basetimestamp", t.LastEdit);
+            switch (location)
+            {
+                case ACTION_EDIT_TEXT_APPEND:
+                    vals.Add("appendtext", text);
+                    break;
+                case ACTION_EDIT_TEXT_PREPEND:
+                    vals.Add("prependtext", text);
+                    break;
+                case ACTION_EDIT_TEXT_REPLACE:
+                    vals.Add("text", text);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("location");
+            }
+
+            switch (exists)
+            {
+                case ACTION_EDIT_EXISTS_DOESEXIST:
+                    vals.Add("nocreate", "true");
+                    break;
+                case ACTION_EDIT_EXISTS_NOCHECK:
+                    break;
+                case ACTION_EDIT_EXISTS_NOTEXIST:
+                    vals.Add("createonly", "true");
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("exists");
+            }
+
             
-            hrq.Method = "POST";
-            hrq.CookieContainer = cookieJar;
-            hrq.Headers = headers;
-            hrq.UserAgent = "Utility/0.1 (MediaWikiApi +http://svn.helpmebot.org.uk:3690/svn/utility)";
+            vals.Add("starttimestamp", t.Timestamp);
+            vals.Add("token", t.Token);
 
-            StringBuilder data = new StringBuilder("format=xml");
-            foreach (string item in postValues)
-            {
-                data.Append("&" + item + "=" + HttpUtility.UrlEncode(postValues[item]));
-            }
+            Stream data = wc.sendHttpPost(new WebHeaderCollection(), vals, "action=edit&title=" + HttpUtility.UrlEncode(t.Title) + ( bot ? "&bot" : "" ));
+            XmlNamespaceManager ns;
+            XPathNodeIterator it = getIterator(data, "//error", out ns);
+            if(it.Count != 0){
+                it.MoveNext();
+                throw new MediaWikiException(it.Current.GetAttribute("info", ns.DefaultNamespace)); 
+        }}
 
-            byte[] byteData = UTF8Encoding.UTF8.GetBytes(data.ToString());
-            hrq.ContentLength = byteData.Length;
+        private XPathNodeIterator getIterator(Stream data, string xpath)
+        {
+            XmlNamespaceManager xNamespace;
+            return getIterator(data, xpath, out xNamespace);
+        }
+        private XPathNodeIterator getIterator(Stream data, string xpath, out  XmlNamespaceManager xNamespace)
+        {
+            return getIterator(data, XPathExpression.Compile(xpath), out xNamespace);
+        }
+        private XPathNodeIterator getIterator(Stream data, XPathExpression xpath)
+        {
+            XmlNamespaceManager xNamespace;
+            return getIterator(data, xpath, out xNamespace);
+        }
 
-            using (Stream postStream = hrq.GetRequestStream())
-            {
-                postStream.Write(byteData, 0, byteData.Length);
-                postStream.Flush();
-            }
+        private XPathNodeIterator getIterator(Stream data, XPathExpression xpath, out XmlNamespaceManager xNamespace)
+        {
+            XPathDocument xDoc = new XPathDocument(data);
+            XPathNavigator xNavigator = xDoc.CreateNavigator();
+            xNamespace = new XmlNamespaceManager(xNavigator.NameTable);
+            XPathNodeIterator xInterator = xNavigator.Select(xpath);
 
-            HttpWebResponse hrs = hrq.GetResponse() as HttpWebResponse;
-            cookieJar = new CookieContainer();
-            cookieJar.Add(hrs.Cookies);
-
-            StreamReader sr = new StreamReader(hrs.GetResponseStream());
-
-            Stream rs = hrs.GetResponseStream();
-
-            return rs;
+            return xInterator;
         }
     }
 }

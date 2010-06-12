@@ -27,9 +27,6 @@ namespace Utility.Net.MediaWiki
        public const int ACTION_EDIT_SECTION_ALL = -1;
 #endregion
 
-        string editToken = "+\\";
-        string editTokenTimestamp = "1970-01-01T00:00:00Z";
-
         public MediaWikiApi()
         {
               wc= new WebClient("http://en.wikipedia.org/w/api.php");
@@ -131,7 +128,8 @@ namespace Utility.Net.MediaWiki
             vals.Add("starttimestamp", t.Timestamp);
             vals.Add("token", t.Token);
 
-            Stream data = wc.sendHttpPost(new WebHeaderCollection(), vals, "action=edit&title=" + HttpUtility.UrlEncode(t.Title) + ( bot ? "&bot" : "" ));
+
+            Stream data = wc.sendHttpPost(new WebHeaderCollection(), vals, "action=edit&title=" + HttpUtility.UrlEncode(t.Title) + ( bot ? "&bot" : "" ) + "&token=" + t.Token);
             XmlNamespaceManager ns;
             XPathNodeIterator it = getIterator(data, "//error", out ns);
             if(it.Count != 0){

@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Text;
-using System.Net;
+﻿using System.Collections.Specialized;
 using System.IO;
+using System.Net;
+using System.Text;
 using System.Web;
-using System.Xml;
-using System.Xml.XPath;
 
 namespace Utility.Net
 {
@@ -24,7 +16,7 @@ namespace Utility.Net
 
 
         string apiBase;
-        CookieContainer cookieJar;
+        public CookieContainer cookieJar;
 
         public Stream sendHttpPost(WebHeaderCollection headers, NameValueCollection postValues, string queryString)
         {
@@ -36,6 +28,7 @@ namespace Utility.Net
             hrq.CookieContainer = cookieJar;
             hrq.Headers = headers;
             hrq.UserAgent = "Utility/0.1 (WebClient +http://svn.helpmebot.org.uk:3690/svn/utility)";
+            hrq.ContentType = "application/x-www-form-urlencoded";
 
             StringBuilder data = new StringBuilder("format=xml");
             foreach (string item in postValues)
@@ -53,7 +46,6 @@ namespace Utility.Net
             }
 
             HttpWebResponse hrs = hrq.GetResponse() as HttpWebResponse;
-            cookieJar = new CookieContainer();
             cookieJar.Add(hrs.Cookies);
 
             StreamReader sr = new StreamReader(hrs.GetResponseStream());
@@ -75,7 +67,6 @@ namespace Utility.Net
             hrq.UserAgent = "Utility/0.1 (WebClient +http://svn.helpmebot.org.uk:3690/svn/utility)";
 
             HttpWebResponse hrs = hrq.GetResponse() as HttpWebResponse;
-            cookieJar = new CookieContainer();
             cookieJar.Add(hrs.Cookies);
 
             StreamReader sr = new StreamReader(hrs.GetResponseStream());

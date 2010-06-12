@@ -4,7 +4,7 @@ using System.Net;
 using System.Text;
 using System.Web;
 
-namespace Utility.Net
+namespace Utility.Net.MediaWiki
 {
   public  class WebClient
     {
@@ -22,7 +22,7 @@ namespace Utility.Net
         {
             System.Net.ServicePointManager.Expect100Continue = false;
 
-            HttpWebRequest hrq = WebRequest.Create(apiBase + "?format=xml&" + queryString) as HttpWebRequest;
+            HttpWebRequest hrq = WebRequest.Create(apiBase + "?format=xml&maxlag=5&" + queryString) as HttpWebRequest;
 
             hrq.Method = "POST";
             hrq.CookieContainer = cookieJar;
@@ -47,19 +47,21 @@ namespace Utility.Net
 
             HttpWebResponse hrs = hrq.GetResponse() as HttpWebResponse;
             cookieJar.Add(hrs.Cookies);
-
+            if (hrs.Headers["X-Database-Lag"] != null)
+                throw new MediaWikiException("Slave is too lagged.");
             StreamReader sr = new StreamReader(hrs.GetResponseStream());
 
             Stream rs = hrs.GetResponseStream();
 
             return rs;
+
         }
 
         public Stream sendHttpGet(WebHeaderCollection headers, string queryString)
         {
             System.Net.ServicePointManager.Expect100Continue = false;
 
-            HttpWebRequest hrq = WebRequest.Create(apiBase + "?format=xml&" + queryString) as HttpWebRequest;
+            HttpWebRequest hrq = WebRequest.Create(apiBase + "?format=xml&maxlag=5&" + queryString) as HttpWebRequest;
 
             hrq.Method = "GET";
             hrq.CookieContainer = cookieJar;
@@ -68,7 +70,8 @@ namespace Utility.Net
 
             HttpWebResponse hrs = hrq.GetResponse() as HttpWebResponse;
             cookieJar.Add(hrs.Cookies);
-
+            if (hrs.Headers["X-Database-Lag"] != null)
+                throw new MediaWikiException("Slave is too lagged.");
             StreamReader sr = new StreamReader(hrs.GetResponseStream());
 
             Stream rs = hrs.GetResponseStream();

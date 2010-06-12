@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Utility.Net.MediaWiki
 {
-    class MediaWikiException : Exception
+   public class MediaWikiException : Exception
     {
         string _message;
 

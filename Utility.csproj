@@ -56,7 +56,7 @@
     <Compile Include="Net\MediaWiki\MediaWikiException.cs" />
     <Compile Include="Net\Monitoring\Nagios\MonitorService.cs" />
     <Compile Include="Net\Social\Twitter.cs" />
-    <Compile Include="Net\WebClient.cs" />
+    <Compile Include="Net\MediaWiki\WebClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -91,7 +91,7 @@ namespace Utility.Net.MediaWiki
             }
 
 
-     
+
 
             vals.Add("summary", summary);
             vals.Add("basetimestamp", t.LastEdit);
@@ -124,18 +124,31 @@ namespace Utility.Net.MediaWiki
                     throw new ArgumentOutOfRangeException("exists");
             }
 
-            
+
             vals.Add("starttimestamp", t.Timestamp);
             vals.Add("token", t.Token);
 
 
-            Stream data = wc.sendHttpPost(new WebHeaderCollection(), vals, "action=edit&title=" + HttpUtility.UrlEncode(t.Title) + ( bot ? "&bot" : "" ) + "&token=" + t.Token);
+            Stream data = wc.sendHttpPost(new WebHeaderCollection(), vals, "action=edit&assert=user&title=" + HttpUtility.UrlEncode(t.Title) + (bot ? "&bot" : "") + "&token=" + t.Token);
             XmlNamespaceManager ns;
             XPathNodeIterator it = getIterator(data, "//error", out ns);
-            if(it.Count != 0){
+            if (it.Count != 0)
+            {
                 it.MoveNext();
-                throw new MediaWikiException(it.Current.GetAttribute("info", ns.DefaultNamespace)); 
-        }}
+                throw new MediaWikiException(it.Current.GetAttribute("info", ns.DefaultNamespace));
+            }
+
+            System.Threading.Thread.Sleep(10 * 1000);
+        }
+
+        public string GetPageContent(string title)
+        {
+            Stream data = wc.sendHttpGet(new WebHeaderCollection(), "action=query&assert=user&prop=revisions&rvprop=content&titles=" + HttpUtility.UrlEncode(title));
+            XmlNamespaceManager xn;
+            XPathNodeIterator xIterator = getIterator(data, "//rev",out xn);
+            xIterator.MoveNext();
+            return (string)xIterator.Current.TypedValue;
+        }
 
         private XPathNodeIterator getIterator(Stream data, string xpath)
         {

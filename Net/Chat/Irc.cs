@@ -237,7 +237,7 @@ namespace Utility.Net.Chat
 
                 return true;
             }
-            catch( SocketException ex )
+            catch( SocketException )
             {
                 return false;
             }

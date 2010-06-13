@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Utility.DataStructures
 {
     public class Array<T>
     {
-        public bool isInArray( T needle, T[ ] haystack )
+        public bool isInArray(T needle, T[] haystack)
         {
-            foreach( T straw in haystack )
+            foreach (T straw in haystack)
             {
-                if( straw.Equals( needle ) )
+                if (straw.Equals(needle))
                 {
                     return true;
                 }
@@ -19,6 +18,7 @@ namespace Utility.DataStructures
             return false;
         }
 
+#if DOTNET4
         public T[ ] intersect( T[ ] a, T[ ] b )
         {
             HashSet<T> setA = new HashSet<T>( a );
@@ -28,5 +28,6 @@ namespace Utility.DataStructures
 
             return resultantSet.ToArray( );
         }
+#endif
     }
 }

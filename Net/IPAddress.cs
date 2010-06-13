@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Net;
 
@@ -12,7 +11,7 @@ namespace Utility.Net
         {
             if( ipText == string.Empty )
                 return null;
-            if( ipText.Contains( '/' ) )
+            if( ipText.Contains( "/" ) )
                 return null;
 
             string[ ] ipOctets = ipText.Split( '.' );

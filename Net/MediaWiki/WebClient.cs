@@ -49,7 +49,6 @@ namespace Utility.Net.MediaWiki
             cookieJar.Add(hrs.Cookies);
             if (hrs.Headers["X-Database-Lag"] != null)
                 throw new MediaWikiException("Slave is too lagged.");
-            StreamReader sr = new StreamReader(hrs.GetResponseStream());
 
             Stream rs = hrs.GetResponseStream();
 
@@ -72,7 +71,6 @@ namespace Utility.Net.MediaWiki
             cookieJar.Add(hrs.Cookies);
             if (hrs.Headers["X-Database-Lag"] != null)
                 throw new MediaWikiException("Slave is too lagged.");
-            StreamReader sr = new StreamReader(hrs.GetResponseStream());
 
             Stream rs = hrs.GetResponseStream();
 

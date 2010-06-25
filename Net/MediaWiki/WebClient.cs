@@ -11,24 +11,28 @@ namespace Utility.Net.MediaWiki
         public WebClient(string baseUrl)
         {
             cookieJar = new CookieContainer();
-            apiBase=baseUrl;
+            _apiBase=baseUrl;
         }
 
 
-        string apiBase;
+        readonly string _apiBase;
         public CookieContainer cookieJar;
 
         public Stream sendHttpPost(WebHeaderCollection headers, NameValueCollection postValues, string queryString)
         {
-            System.Net.ServicePointManager.Expect100Continue = false;
+            ServicePointManager.Expect100Continue = false;
 
-            HttpWebRequest hrq = WebRequest.Create(apiBase + "?format=xml&maxlag=5&" + queryString) as HttpWebRequest;
+            HttpWebRequest hrq = WebRequest.Create(_apiBase + "?format=xml&maxlag=5&" + queryString) as HttpWebRequest;
+
+            if (hrq == null)
+                return null;
 
             hrq.Method = "POST";
             hrq.CookieContainer = cookieJar;
             hrq.Headers = headers;
             hrq.UserAgent = "Utility/0.1 (WebClient +http://svn.helpmebot.org.uk:3690/svn/utility)";
             hrq.ContentType = "application/x-www-form-urlencoded";
+           
 
             StringBuilder data = new StringBuilder("format=xml");
             foreach (string item in postValues)
@@ -36,7 +40,7 @@ namespace Utility.Net.MediaWiki
                 data.Append("&" + item + "=" + HttpUtility.UrlEncode(postValues[item]));
             }
 
-            byte[] byteData = UTF8Encoding.UTF8.GetBytes(data.ToString());
+            byte[] byteData = Encoding.UTF8.GetBytes(data.ToString());
             hrq.ContentLength = byteData.Length;
 
             using (Stream postStream = hrq.GetRequestStream())
@@ -46,6 +50,8 @@ namespace Utility.Net.MediaWiki
             }
 
             HttpWebResponse hrs = hrq.GetResponse() as HttpWebResponse;
+            if(hrs== null) return null;
+            
             cookieJar.Add(hrs.Cookies);
             if (hrs.Headers["X-Database-Lag"] != null)
                 throw new MediaWikiException("Slave is too lagged.");
@@ -58,9 +64,11 @@ namespace Utility.Net.MediaWiki
 
         public Stream sendHttpGet(WebHeaderCollection headers, string queryString)
         {
-            System.Net.ServicePointManager.Expect100Continue = false;
+            ServicePointManager.Expect100Continue = false;
 
-            HttpWebRequest hrq = WebRequest.Create(apiBase + "?format=xml&maxlag=5&" + queryString) as HttpWebRequest;
+            HttpWebRequest hrq = WebRequest.Create(_apiBase + "?format=xml&maxlag=5&" + queryString) as HttpWebRequest;
+            if (hrq == null)
+                return null;
 
             hrq.Method = "GET";
             hrq.CookieContainer = cookieJar;
@@ -68,6 +76,9 @@ namespace Utility.Net.MediaWiki
             hrq.UserAgent = "Utility/0.1 (WebClient +http://svn.helpmebot.org.uk:3690/svn/utility)";
 
             HttpWebResponse hrs = hrq.GetResponse() as HttpWebResponse;
+            if (hrs == null)
+                return null;
+
             cookieJar.Add(hrs.Cookies);
             if (hrs.Headers["X-Database-Lag"] != null)
                 throw new MediaWikiException("Slave is too lagged.");

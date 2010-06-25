@@ -9,7 +9,11 @@ namespace Utility.Net.MediaWiki
 {
     public class EditToken
     {
-        string _token, _timestamp, _title, _lastedit;
+        readonly string _token;
+        readonly string _timestamp;
+        readonly string _title;
+        readonly string _lastedit;
+
         public EditToken(string token, string timestamp, string title, string lastedit)
         {
             _token = token;
@@ -18,28 +22,28 @@ namespace Utility.Net.MediaWiki
             _lastedit = lastedit;
         }
 
-        public string Token
+        public string token
         {
             get
             {
                 return _token;
             }
         }
-        public string Timestamp
+        public string timestamp
         {
             get
             {
                 return _timestamp;
             }
         }
-        public string Title
+        public string title
         {
             get
             {
                 return _title;
             }
         }
-        public string LastEdit
+        public string lastEdit
         {
             get
             {
@@ -47,7 +51,7 @@ namespace Utility.Net.MediaWiki
             }
         }
 
-        public static EditToken Get(WebClient wc, string title)
+        public static EditToken get(WebClient wc, string title)
         {
             Stream data = wc.sendHttpGet(new WebHeaderCollection(), "action=query&prop=info|revisions&intoken=edit&titles=" + HttpUtility.UrlEncode(title));
 

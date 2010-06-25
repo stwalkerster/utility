@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Utility.Net.MediaWiki
 {
    public class MediaWikiException : Exception
     {
-        string _message;
+       readonly string _message;
 
         public override string Message
         {
@@ -18,7 +16,7 @@ namespace Utility.Net.MediaWiki
 
         public MediaWikiException(string message)
         {
-            this._message = message;
+            _message = message;
         }
     }
 }

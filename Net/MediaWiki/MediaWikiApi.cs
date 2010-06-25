@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Text;
 using System.Net;
 using System.IO;
 using System.Web;
@@ -12,7 +10,7 @@ namespace Utility.Net.MediaWiki
 {
     public class MediaWikiApi
     {
-        WebClient wc ;
+        readonly WebClient _wc ;
 
 #region Constants
        public const int ACTION_EDIT_EXISTS_DOESEXIST = 1;
@@ -29,31 +27,29 @@ namespace Utility.Net.MediaWiki
 
         public MediaWikiApi()
         {
-              wc= new WebClient("http://en.wikipedia.org/w/api.php");
+              _wc= new WebClient("http://en.wikipedia.org/w/api.php");
         }
         public MediaWikiApi(string apiBase)
         {
-            wc= new WebClient(apiBase);
+            _wc= new WebClient(apiBase);
         }
 
-        public void Login(string username, string password)
+        public void login(string username, string password)
         {
-            NameValueCollection vals = new NameValueCollection();
-            vals.Add("lgpassword", password);
-            Stream data = wc.sendHttpPost(new WebHeaderCollection(), vals, "action=login&lgname=Stwalkerbot&lgpassword="+password);
+            NameValueCollection vals = new NameValueCollection {{"lgpassword", password}};
+            Stream data = _wc.sendHttpPost(new WebHeaderCollection(), vals, "action=login&lgname=Stwalkerbot&lgpassword="+password);
 
             XmlNamespaceManager xNamespace;
             XPathNodeIterator xIterator = getIterator(data, "//login", out xNamespace);
 
-            string token = "";
             xIterator.MoveNext();
 
             string result = xIterator.Current.GetAttribute("result", xNamespace.DefaultNamespace);
             if (result == "NeedToken")
             {
-                token = xIterator.Current.GetAttribute("token", xNamespace.DefaultNamespace);
+                string token = xIterator.Current.GetAttribute("token", xNamespace.DefaultNamespace);
 
-                data = wc.sendHttpPost(new WebHeaderCollection(), vals, "action=login&lgname=Stwalkerbot&lgtoken=" + token + "&lgpassword=" + password);
+                data = _wc.sendHttpPost(new WebHeaderCollection(), vals, "action=login&lgname=Stwalkerbot&lgtoken=" + token + "&lgpassword=" + password);
 
                 xIterator = getIterator(data, "//login");
                 xIterator.MoveNext();
@@ -76,25 +72,21 @@ namespace Utility.Net.MediaWiki
         /// <param name="bot">flag as a bot edit</param>
         /// <param name="location">Where to put the text</param>
         /// <param name="section">section to edit</param>
-        public void Edit(string title, string text, string summary, int exists, bool minor, bool bot, int location, int section)
+        public void edit(string title, string text, string summary, int exists, bool minor, bool bot, int location, int section)
         {
-            EditToken t = EditToken.Get(wc, title);
+            EditToken t = EditToken.get(_wc, title);
 
             NameValueCollection vals = new NameValueCollection();
             if (section != ACTION_EDIT_SECTION_ALL)
             {
-                if (section == ACTION_EDIT_SECTION_NEW)
-                    vals.Add("section", "new");
-                else
-                    vals.Add("section", section.ToString());
-
+                vals.Add("section", section == ACTION_EDIT_SECTION_NEW ? "new" : section.ToString());
             }
 
 
 
 
             vals.Add("summary", summary);
-            vals.Add("basetimestamp", t.LastEdit);
+            vals.Add("basetimestamp", t.lastEdit);
             switch (location)
             {
                 case ACTION_EDIT_TEXT_APPEND:
@@ -125,11 +117,11 @@ namespace Utility.Net.MediaWiki
             }
 
 
-            vals.Add("starttimestamp", t.Timestamp);
-            vals.Add("token", t.Token);
+            vals.Add("starttimestamp", t.timestamp);
+            vals.Add("token", t.token);
 
 
-            Stream data = wc.sendHttpPost(new WebHeaderCollection(), vals, "action=edit&assert=user&title=" + HttpUtility.UrlEncode(t.Title) + (bot ? "&bot" : "") + "&token=" + t.Token);
+            Stream data = _wc.sendHttpPost(new WebHeaderCollection(), vals, "action=edit&assert=user&title=" + HttpUtility.UrlEncode(t.title) + (bot ? "&bot" : "") + "&token=" + t.token);
             XmlNamespaceManager ns;
             XPathNodeIterator it = getIterator(data, "//error", out ns);
             if (it.Count != 0)
@@ -141,9 +133,9 @@ namespace Utility.Net.MediaWiki
             System.Threading.Thread.Sleep(10 * 1000);
         }
 
-        public string GetPageContent(string title)
+        public string getPageContent(string title)
         {
-            Stream data = wc.sendHttpGet(new WebHeaderCollection(), "action=query&assert=user&prop=revisions&rvprop=content&titles=" + HttpUtility.UrlEncode(title));
+            Stream data = _wc.sendHttpGet(new WebHeaderCollection(), "action=query&assert=user&prop=revisions&rvprop=content&titles=" + HttpUtility.UrlEncode(title));
             XmlNamespaceManager xn;
             XPathNodeIterator xIterator = getIterator(data, "//rev",out xn);
             xIterator.MoveNext();

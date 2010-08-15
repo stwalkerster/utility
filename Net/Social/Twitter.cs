@@ -6,40 +6,15 @@ using System.IO;
 
 namespace Utility.Net.Social
 {
-   public class Twitter
+   public class Twitter : Utility.Net.Authentication.OAuthBase
     {
-        public Twitter( string username, string password)
+        public Twitter( )
         {
-            _username = username;
-            _password = password;
+            _accessToken = null;
             _ua = "Utility/0.1 (TwitterClient +http://svn.helpmebot.org.uk:3690/svn/utility)";
         }
 
-        string _username, _password, _ua;
-
-        public string twitterUsername
-        {
-            get
-            {
-                return _username;
-            }
-            set
-            {
-                _username = value;
-            }
-        }
-        public string twitterPassword
-        {
-            private get
-            {
-                return _password;
-            }
-            set
-            {
-                _password = value;
-            }
-        }
-
+        string  _ua, _accessToken;
         public string userAgent
         {
             get
@@ -59,12 +34,15 @@ namespace Utility.Net.Social
         /// <see cref="http://apiwiki.twitter.com/Twitter-REST-API-Method:-statuses%C2%A0update"/>
         public HttpStatusCode statuses_update(string status)
         { // POST
+            if( _accessToken == null )
+                throw new System.Security.Authentication.AuthenticationException( );
+
             string url = "http://api.twitter.com/1/statuses/update.xml" ;
             
             status = (status.Length > 140 ? status.Substring( 0, 140 ) : status);
             string postData = "status=" + status;
 
-            HttpWebResponse wrsp = postResponse(url, postData);
+            HttpWebResponse wrsp = postResponse(url, postData, null);
 
             return wrsp.StatusCode;
         }
@@ -77,7 +55,10 @@ namespace Utility.Net.Social
         private void statuses_show( int id )
         { // GET
             //http://api.twitter.com/1/statuses/show/id.format
-            
+
+            if( _accessToken == null )
+                throw new System.Security.Authentication.AuthenticationException( );
+
         }
 
         /// <summary>
@@ -87,6 +68,8 @@ namespace Utility.Net.Social
         /// <see cref="http://apiwiki.twitter.com/Twitter-REST-API-Method:-statuses%C2%A0destroy"/>
         private void statuses_destroy( int id )
         {
+            if( _accessToken == null )
+                throw new System.Security.Authentication.AuthenticationException( );
         }
 
         /// <summary>
@@ -95,12 +78,16 @@ namespace Utility.Net.Social
         /// <see cref="http://apiwiki.twitter.com/Twitter-REST-API-Method:-statuses-retweet"/>
         private void statuses_retweet( )
         {
+            if( _accessToken == null )
+                throw new System.Security.Authentication.AuthenticationException( );
         }
 
-        private HttpWebResponse postResponse( string url, string parameters )
+        private HttpWebResponse postResponse( string url, string parameters, WebHeaderCollection headers)
         {
             HttpWebRequest wr = (HttpWebRequest)WebRequest.Create( url );
-            wr.Credentials = new NetworkCredential( twitterUsername, twitterPassword );
+
+            wr.Headers = headers;
+
             wr.Method = "POST";
             wr.UserAgent = this.userAgent;
 
@@ -119,5 +106,11 @@ namespace Utility.Net.Social
 
             return wrsp;
         }
+
+        public void authenticate( )
+        {
+
+        }
+
     }
 }

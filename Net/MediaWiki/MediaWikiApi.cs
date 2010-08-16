@@ -37,7 +37,7 @@ namespace Utility.Net.MediaWiki
         public void login(string username, string password)
         {
             NameValueCollection vals = new NameValueCollection {{"lgpassword", password}};
-            Stream data = _wc.sendHttpPost(new WebHeaderCollection(), vals, "action=login&lgname=Stwalkerbot&lgpassword="+password);
+            Stream data = _wc.sendHttpPost(new WebHeaderCollection(), vals, "action=login&lgname="+username+"&lgpassword="+password);
 
             XmlNamespaceManager xNamespace;
             XPathNodeIterator xIterator = getIterator(data, "//login", out xNamespace);
@@ -49,7 +49,7 @@ namespace Utility.Net.MediaWiki
             {
                 string token = xIterator.Current.GetAttribute("token", xNamespace.DefaultNamespace);
 
-                data = _wc.sendHttpPost(new WebHeaderCollection(), vals, "action=login&lgname=Stwalkerbot&lgtoken=" + token + "&lgpassword=" + password);
+                data = _wc.sendHttpPost(new WebHeaderCollection(), vals, "action=login&lgname="+ username +"&lgtoken=" + token + "&lgpassword=" + password);
 
                 xIterator = getIterator(data, "//login");
                 xIterator.MoveNext();

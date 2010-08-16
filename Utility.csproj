@@ -49,6 +49,7 @@
     <Compile Include="Interaction\ConsoleMenu.cs" />
     <Compile Include="Interaction\ConsoleMenuItem.cs" />
     <Compile Include="DataStructures\LinkList.cs" />
+    <Compile Include="Net\Authentication\OAuthBase.cs" />
     <Compile Include="Net\Chat\Irc.cs" />
     <Compile Include="Net\IPAddress.cs" />
     <Compile Include="Net\MediaWiki\EditToken.cs" />

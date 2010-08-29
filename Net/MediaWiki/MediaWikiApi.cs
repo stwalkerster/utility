@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Specialized;
 using System.Net;
 using System.IO;
@@ -10,34 +11,34 @@ namespace Utility.Net.MediaWiki
 {
     public class MediaWikiApi
     {
-        readonly WebClient _wc ;
+        readonly WebClient _wc;
 
-#region Constants
-       public const int ACTION_EDIT_EXISTS_DOESEXIST = 1;
-       public const int ACTION_EDIT_EXISTS_NOCHECK = 0;
-       public const int ACTION_EDIT_EXISTS_NOTEXIST = -1;
+        #region Constants
+        public const int ACTION_EDIT_EXISTS_DOESEXIST = 1;
+        public const int ACTION_EDIT_EXISTS_NOCHECK = 0;
+        public const int ACTION_EDIT_EXISTS_NOTEXIST = -1;
 
-       public const int ACTION_EDIT_TEXT_PREPEND = -1;
-       public const int ACTION_EDIT_TEXT_REPLACE = 0;
-       public const int ACTION_EDIT_TEXT_APPEND = 1;
+        public const int ACTION_EDIT_TEXT_PREPEND = -1;
+        public const int ACTION_EDIT_TEXT_REPLACE = 0;
+        public const int ACTION_EDIT_TEXT_APPEND = 1;
 
-       public const int ACTION_EDIT_SECTION_NEW = -2;
-       public const int ACTION_EDIT_SECTION_ALL = -1;
-#endregion
+        public const int ACTION_EDIT_SECTION_NEW = -2;
+        public const int ACTION_EDIT_SECTION_ALL = -1;
+        #endregion
 
         public MediaWikiApi()
         {
-              _wc= new WebClient("http://en.wikipedia.org/w/api.php");
+            _wc = new WebClient("http://en.wikipedia.org/w/api.php");
         }
         public MediaWikiApi(string apiBase)
         {
-            _wc= new WebClient(apiBase);
+            _wc = new WebClient(apiBase);
         }
 
         public void login(string username, string password)
         {
-            NameValueCollection vals = new NameValueCollection {{"lgpassword", password}};
-            Stream data = _wc.sendHttpPost(new WebHeaderCollection(), vals, "action=login&lgname="+username+"&lgpassword="+password);
+            NameValueCollection vals = new NameValueCollection { { "lgpassword", password } };
+            Stream data = _wc.sendHttpPost(new WebHeaderCollection(), vals, "action=login&lgname=" + username + "&lgpassword=" + password);
 
             XmlNamespaceManager xNamespace;
             XPathNodeIterator xIterator = getIterator(data, "//login", out xNamespace);
@@ -49,7 +50,7 @@ namespace Utility.Net.MediaWiki
             {
                 string token = xIterator.Current.GetAttribute("token", xNamespace.DefaultNamespace);
 
-                data = _wc.sendHttpPost(new WebHeaderCollection(), vals, "action=login&lgname="+ username +"&lgtoken=" + token + "&lgpassword=" + password);
+                data = _wc.sendHttpPost(new WebHeaderCollection(), vals, "action=login&lgname=" + username + "&lgtoken=" + token + "&lgpassword=" + password);
 
                 xIterator = getIterator(data, "//login");
                 xIterator.MoveNext();
@@ -129,15 +130,14 @@ namespace Utility.Net.MediaWiki
                 it.MoveNext();
                 throw new MediaWikiException(it.Current.GetAttribute("info", ns.DefaultNamespace));
             }
-
-            System.Threading.Thread.Sleep(10 * 1000);
+            System.Threading.Thread.Sleep(1000 * 10);
         }
 
         public string getPageContent(string title)
         {
             Stream data = _wc.sendHttpGet(new WebHeaderCollection(), "action=query&assert=user&prop=revisions&rvprop=content&titles=" + HttpUtility.UrlEncode(title));
             XmlNamespaceManager xn;
-            XPathNodeIterator xIterator = getIterator(data, "//rev",out xn);
+            XPathNodeIterator xIterator = getIterator(data, "//rev", out xn);
             xIterator.MoveNext();
             return (string)xIterator.Current.TypedValue;
         }
@@ -165,6 +165,22 @@ namespace Utility.Net.MediaWiki
             XPathNodeIterator xInterator = xNavigator.Select(xpath);
 
             return xInterator;
+        }
+
+        public ArrayList getPages(int ns, int limit)
+        {
+            Stream data = _wc.sendHttpGet(new WebHeaderCollection(),
+                                          "action=query&list=allpages&apnamespace=" + ns + "&aplimit=" + limit);
+            XmlNamespaceManager xn;
+            XPathNodeIterator xIterator = getIterator(data, "//p", out xn);
+
+            ArrayList l = new ArrayList();
+            while (xIterator.MoveNext())
+            {
+                l.Add(xIterator.Current.GetAttribute("title", xn.DefaultNamespace));
+            }
+
+            return l;
         }
     }
 }

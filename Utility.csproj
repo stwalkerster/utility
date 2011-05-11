@@ -61,6 +61,7 @@
     <Compile Include="Net\Authentication\OAuthBase.cs" />
     <Compile Include="Net\Chat\Irc.cs" />
     <Compile Include="Net\IPAddress.cs" />
+    <Compile Include="Net\MediaWiki\DeleteToken.cs" />
     <Compile Include="Net\MediaWiki\EditToken.cs" />
     <Compile Include="Net\MediaWiki\MediaWikiApi.cs" />
     <Compile Include="Net\MediaWiki\MediaWikiException.cs" />

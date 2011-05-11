@@ -94,9 +94,6 @@ namespace Utility.Net.MediaWiki
                 vals.Add("section", section == ACTION_EDIT_SECTION_NEW ? "new" : section.ToString());
             }
 
-
-
-
             vals.Add("summary", summary);
             vals.Add("basetimestamp", t.lastEdit);
             switch (location)
@@ -128,10 +125,8 @@ namespace Utility.Net.MediaWiki
                     throw new ArgumentOutOfRangeException("exists");
             }
 
-
             vals.Add("starttimestamp", t.timestamp);
             vals.Add("token", t.token);
-
 
             Stream data = _wc.sendHttpPost(new WebHeaderCollection(), vals, "action=edit&assert=user&title=" + HttpUtility.UrlEncode(t.title) + (bot ? "&bot" : "") + "&token=" + t.token);
             XmlNamespaceManager ns;
@@ -225,6 +220,24 @@ namespace Utility.Net.MediaWiki
         //    //return l;
         //}
 
+        public void delete(string title, string reason)
+        {
+            DeleteToken t = DeleteToken.get(_wc, title);
 
+            NameValueCollection vals = new NameValueCollection();
+
+            vals.Add("title", title);
+            vals.Add("token", t.token);
+            vals.Add("reason", reason);
+
+            Stream data = _wc.sendHttpPost(new WebHeaderCollection(), vals, "action=delete");
+            XmlNamespaceManager ns;
+            XPathNodeIterator it = getIterator(data, "//error", out ns);
+            if (it.Count != 0)
+            {
+                it.MoveNext();
+                throw new MediaWikiException(it.Current.GetAttribute("info", ns.DefaultNamespace));
+            }
+        }
     }
 }

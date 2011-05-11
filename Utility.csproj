@@ -38,8 +38,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -50,6 +52,12 @@
     <Compile Include="Interaction\ConsoleMenu.cs" />
     <Compile Include="Interaction\ConsoleMenuItem.cs" />
     <Compile Include="DataStructures\LinkList.cs" />
+    <Compile Include="Interaction\LoginForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Interaction\LoginForm.Designer.cs">
+      <DependentUpon>LoginForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Net\Authentication\OAuthBase.cs" />
     <Compile Include="Net\Chat\Irc.cs" />
     <Compile Include="Net\IPAddress.cs" />
@@ -60,6 +68,11 @@
     <Compile Include="Net\Social\Twitter.cs" />
     <Compile Include="Net\MediaWiki\WebClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Interaction\LoginForm.resx">
+      <DependentUpon>LoginForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

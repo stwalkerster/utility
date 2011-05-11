@@ -47,7 +47,17 @@ namespace Utility.Net.MediaWiki
 
         public bool login(string username, string password, out string result)
         {
-            NameValueCollection vals = new NameValueCollection { { "lgpassword", password } };
+            return login(username, password, "", out result);
+        }
+        public bool login(string username, string password, string domain, out string result)
+        {
+            NameValueCollection vals = new NameValueCollection();
+            vals.Add("lgpassword", password );
+            if(domain != "")
+            {
+                vals.Add("lgdomain", domain);
+            }
+
             Stream data = _wc.sendHttpPost(new WebHeaderCollection(), vals, "action=login&lgname=" + username + "&lgpassword=" + password);
 
             XmlNamespaceManager xNamespace;
@@ -238,6 +248,36 @@ namespace Utility.Net.MediaWiki
                 it.MoveNext();
                 throw new MediaWikiException(it.Current.GetAttribute("info", ns.DefaultNamespace));
             }
+        }
+    
+        public bool hasBacklinks(string title)
+        {
+            Stream data = _wc.sendHttpGet(new WebHeaderCollection(), "action=query&list=backlinks&bllimit=1&bltitle=" + HttpUtility.UrlEncode(title) );
+            XmlNamespaceManager ns;
+            XPathNodeIterator it = getIterator(data, "//bl", out ns);
+            return it.Count != 0;
+        }
+
+        public bool imageIsUsed(string title)
+        {
+
+            Stream data = _wc.sendHttpGet(new WebHeaderCollection(), "action=query&list=imageusage&iutitle=" + HttpUtility.UrlEncode(title));
+            XmlNamespaceManager ns;
+            XPathNodeIterator it = getIterator(data, "//iu", out ns);
+            return it.Count != 0;
+            return true;
+        }
+
+        public bool isRedirect(string title)
+        {
+            Stream data = _wc.sendHttpGet(new WebHeaderCollection(), "action=query&prop=info&titles=" + HttpUtility.UrlEncode(title) );
+            XmlNamespaceManager ns;
+            XPathNodeIterator it = getIterator(data, "//page", out ns);
+
+            it.MoveNext();
+            if (it.Current.OuterXml.Contains("redirect=\"\""))
+                return true;
+            return false;
         }
     }
 }

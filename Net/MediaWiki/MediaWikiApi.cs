@@ -35,7 +35,17 @@ namespace Utility.Net.MediaWiki
             _wc = new WebClient(apiBase);
         }
 
+        [Obsolete()]
         public void login(string username, string password)
+        {
+            string result;
+            login(username, password, out result);
+
+            if (result != "Success")
+                throw new MediaWikiException("Login failed: " + result);
+        }
+
+        public bool login(string username, string password, out string result)
         {
             NameValueCollection vals = new NameValueCollection { { "lgpassword", password } };
             Stream data = _wc.sendHttpPost(new WebHeaderCollection(), vals, "action=login&lgname=" + username + "&lgpassword=" + password);
@@ -45,7 +55,7 @@ namespace Utility.Net.MediaWiki
 
             xIterator.MoveNext();
 
-            string result = xIterator.Current.GetAttribute("result", xNamespace.DefaultNamespace);
+            result = xIterator.Current.GetAttribute("result", xNamespace.DefaultNamespace);
             if (result == "NeedToken")
             {
                 string token = xIterator.Current.GetAttribute("token", xNamespace.DefaultNamespace);
@@ -58,8 +68,9 @@ namespace Utility.Net.MediaWiki
                 result = xIterator.Current.GetAttribute("result", xNamespace.DefaultNamespace);
             }
 
-            if (result != "Success")
-                throw new MediaWikiException("Login failed: " + result);
+            if (result == "Success")
+                return true;
+            return false;
         }
 
         /// <summary>
@@ -182,5 +193,38 @@ namespace Utility.Net.MediaWiki
 
             return l;
         }
+    
+        public ArrayList getCurrentUserRights()
+        {
+            Stream data = _wc.sendHttpGet(new WebHeaderCollection(), "action=query&meta=userinfo&uiprop=rights");
+            XmlNamespaceManager xn;
+            XPathNodeIterator xIterator = getIterator(data, "//r", out xn);
+
+            ArrayList l = new ArrayList();
+            while (xIterator.MoveNext())
+            {
+                l.Add(xIterator.Current.Value);
+            }
+
+            return l;
+        }
+
+        //public bool pageExists(string title)
+        //{
+        //    //Stream data = _wc.sendHttpGet(new WebHeaderCollection(),
+        //    //                  "action=query&list=allpages&apnamespace=" + ns + "&aplimit=" + limit);
+        //    //XmlNamespaceManager xn;
+        //    //XPathNodeIterator xIterator = getIterator(data, "//p", out xn);
+
+        //    //ArrayList l = new ArrayList();
+        //    //while (xIterator.MoveNext())
+        //    //{
+        //    //    l.Add(xIterator.Current.GetAttribute("title", xn.DefaultNamespace));
+        //    //}
+
+        //    //return l;
+        //}
+
+
     }
 }

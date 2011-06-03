@@ -52,6 +52,19 @@
     <Compile Include="Interaction\ConsoleMenu.cs" />
     <Compile Include="Interaction\ConsoleMenuItem.cs" />
     <Compile Include="DataStructures\LinkList.cs" />
+    <Compile Include="Interaction\ExceptionHandler\ExceptionHandler.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Interaction\ExceptionHandler\ExceptionHandler.Designer.cs">
+      <DependentUpon>ExceptionHandler.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Interaction\ExceptionHandler\ExceptionHandlerConfiguration.cs" />
+    <Compile Include="Interaction\ExceptionHandler\ExceptionHandlerOptionItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Interaction\ExceptionHandler\ExceptionHandlerOptionItem.Designer.cs">
+      <DependentUpon>ExceptionHandlerOptionItem.cs</DependentUpon>
+    </Compile>
     <Compile Include="Interaction\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -70,11 +83,29 @@
     <Compile Include="Net\Social\Twitter.cs" />
     <Compile Include="Net\MediaWiki\WebClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Interaction\ExceptionHandler\ExceptionHandler.resx">
+      <DependentUpon>ExceptionHandler.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Interaction\ExceptionHandler\ExceptionHandlerOptionItem.resx">
+      <DependentUpon>ExceptionHandlerOptionItem.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Interaction\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\core.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

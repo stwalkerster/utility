@@ -9,10 +9,8 @@ namespace Utility.Interaction.ExceptionHandler
     {
         public ExceptionHandlerConfiguration()
         {
-            unhandledExceptionMode = UnhandledExceptionMode.CatchException;
         }
 
-        public UnhandledExceptionMode unhandledExceptionMode { get; set; }
         public bool showTechnicalInformation { get; set; }
         public string contactEmailAddress { get; set; }
         public string gitHubRepository { get; set; }

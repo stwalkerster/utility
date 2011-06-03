@@ -35,8 +35,14 @@
             this.label3 = new System.Windows.Forms.Label();
             this.optionListPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.exceptionHandlerOptionExit = new Utility.Interaction.ExceptionHandler.ExceptionHandlerOptionItem();
+            this.exceptionHandlerOptionContinue = new Utility.Interaction.ExceptionHandler.ExceptionHandlerOptionItem();
+            this.exceptionHandlerOptionSendReport = new Utility.Interaction.ExceptionHandler.ExceptionHandlerOptionItem();
+            this.exceptionHandlerOptionBugTracker = new Utility.Interaction.ExceptionHandler.ExceptionHandlerOptionItem();
+            this.exceptionHandlerOptionGitHub = new Utility.Interaction.ExceptionHandler.ExceptionHandlerOptionItem();
+            this.exceptionHandlerOptionTechInfo = new Utility.Interaction.ExceptionHandler.ExceptionHandlerOptionItem();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.optionListPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -53,16 +59,14 @@
             this.tableLayoutPanel1.Controls.Add(this.label2, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.label3, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.optionListPanel, 2, 3);
-            this.tableLayoutPanel1.Controls.Add(this.exceptionHandlerOptionExit, 2, 4);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 5;
+            this.tableLayoutPanel1.RowCount = 4;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 118F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(780, 289);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 253F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(780, 260);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // pictureBox1
@@ -114,10 +118,15 @@
             // optionListPanel
             // 
             this.optionListPanel.AutoScroll = true;
-            this.optionListPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.optionListPanel.Controls.Add(this.exceptionHandlerOptionSendReport);
+            this.optionListPanel.Controls.Add(this.exceptionHandlerOptionBugTracker);
+            this.optionListPanel.Controls.Add(this.exceptionHandlerOptionGitHub);
+            this.optionListPanel.Controls.Add(this.exceptionHandlerOptionTechInfo);
+            this.optionListPanel.Controls.Add(this.exceptionHandlerOptionContinue);
+            this.optionListPanel.Controls.Add(this.exceptionHandlerOptionExit);
             this.optionListPanel.Location = new System.Drawing.Point(169, 122);
             this.optionListPanel.Name = "optionListPanel";
-            this.optionListPanel.Size = new System.Drawing.Size(608, 112);
+            this.optionListPanel.Size = new System.Drawing.Size(608, 138);
             this.optionListPanel.TabIndex = 4;
             // 
             // exceptionHandlerOptionExit
@@ -125,17 +134,72 @@
             this.exceptionHandlerOptionExit.ButtonColour = System.Drawing.Color.MistyRose;
             this.exceptionHandlerOptionExit.ButtonText = "Exit";
             this.exceptionHandlerOptionExit.Description = "Exit the Application";
-            this.exceptionHandlerOptionExit.Location = new System.Drawing.Point(169, 240);
+            this.exceptionHandlerOptionExit.Location = new System.Drawing.Point(3, 178);
             this.exceptionHandlerOptionExit.MaximumSize = new System.Drawing.Size(577, 29);
             this.exceptionHandlerOptionExit.Name = "exceptionHandlerOptionExit";
             this.exceptionHandlerOptionExit.Size = new System.Drawing.Size(577, 29);
             this.exceptionHandlerOptionExit.TabIndex = 6;
             // 
+            // exceptionHandlerOptionContinue
+            // 
+            this.exceptionHandlerOptionContinue.ButtonColour = System.Drawing.Color.Honeydew;
+            this.exceptionHandlerOptionContinue.ButtonText = "Continue";
+            this.exceptionHandlerOptionContinue.Description = "Attempt to continue (could cause application instability and lost data)";
+            this.exceptionHandlerOptionContinue.Location = new System.Drawing.Point(3, 143);
+            this.exceptionHandlerOptionContinue.MaximumSize = new System.Drawing.Size(577, 29);
+            this.exceptionHandlerOptionContinue.Name = "exceptionHandlerOptionContinue";
+            this.exceptionHandlerOptionContinue.Size = new System.Drawing.Size(577, 29);
+            this.exceptionHandlerOptionContinue.TabIndex = 0;
+            // 
+            // exceptionHandlerOptionSendReport
+            // 
+            this.exceptionHandlerOptionSendReport.ButtonColour = System.Drawing.Color.Honeydew;
+            this.exceptionHandlerOptionSendReport.ButtonText = "Send Report";
+            this.exceptionHandlerOptionSendReport.Description = "Send a crash report to the developer via email";
+            this.exceptionHandlerOptionSendReport.Location = new System.Drawing.Point(3, 3);
+            this.exceptionHandlerOptionSendReport.MaximumSize = new System.Drawing.Size(577, 29);
+            this.exceptionHandlerOptionSendReport.Name = "exceptionHandlerOptionSendReport";
+            this.exceptionHandlerOptionSendReport.Size = new System.Drawing.Size(577, 29);
+            this.exceptionHandlerOptionSendReport.TabIndex = 1;
+            // 
+            // exceptionHandlerOptionBugTracker
+            // 
+            this.exceptionHandlerOptionBugTracker.ButtonColour = System.Drawing.Color.Honeydew;
+            this.exceptionHandlerOptionBugTracker.ButtonText = "Bug tracker";
+            this.exceptionHandlerOptionBugTracker.Description = "Go to the bug tracker to submit a bug report";
+            this.exceptionHandlerOptionBugTracker.Location = new System.Drawing.Point(3, 38);
+            this.exceptionHandlerOptionBugTracker.MaximumSize = new System.Drawing.Size(577, 29);
+            this.exceptionHandlerOptionBugTracker.Name = "exceptionHandlerOptionBugTracker";
+            this.exceptionHandlerOptionBugTracker.Size = new System.Drawing.Size(577, 29);
+            this.exceptionHandlerOptionBugTracker.TabIndex = 2;
+            // 
+            // exceptionHandlerOptionGitHub
+            // 
+            this.exceptionHandlerOptionGitHub.ButtonColour = System.Drawing.Color.Honeydew;
+            this.exceptionHandlerOptionGitHub.ButtonText = "Browse Source Code";
+            this.exceptionHandlerOptionGitHub.Description = "Browse the source code on GitHub";
+            this.exceptionHandlerOptionGitHub.Location = new System.Drawing.Point(3, 73);
+            this.exceptionHandlerOptionGitHub.MaximumSize = new System.Drawing.Size(577, 29);
+            this.exceptionHandlerOptionGitHub.Name = "exceptionHandlerOptionGitHub";
+            this.exceptionHandlerOptionGitHub.Size = new System.Drawing.Size(577, 29);
+            this.exceptionHandlerOptionGitHub.TabIndex = 3;
+            // 
+            // exceptionHandlerOptionTechInfo
+            // 
+            this.exceptionHandlerOptionTechInfo.ButtonColour = System.Drawing.Color.Honeydew;
+            this.exceptionHandlerOptionTechInfo.ButtonText = "Technical info";
+            this.exceptionHandlerOptionTechInfo.Description = "View Technical information about this error";
+            this.exceptionHandlerOptionTechInfo.Location = new System.Drawing.Point(3, 108);
+            this.exceptionHandlerOptionTechInfo.MaximumSize = new System.Drawing.Size(577, 29);
+            this.exceptionHandlerOptionTechInfo.Name = "exceptionHandlerOptionTechInfo";
+            this.exceptionHandlerOptionTechInfo.Size = new System.Drawing.Size(577, 29);
+            this.exceptionHandlerOptionTechInfo.TabIndex = 4;
+            // 
             // ExceptionHandler
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(804, 313);
+            this.ClientSize = new System.Drawing.Size(804, 284);
             this.Controls.Add(this.tableLayoutPanel1);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -146,6 +210,7 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.optionListPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -159,5 +224,10 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.FlowLayoutPanel optionListPanel;
         private ExceptionHandlerOptionItem exceptionHandlerOptionExit;
+        private ExceptionHandlerOptionItem exceptionHandlerOptionContinue;
+        private ExceptionHandlerOptionItem exceptionHandlerOptionSendReport;
+        private ExceptionHandlerOptionItem exceptionHandlerOptionBugTracker;
+        private ExceptionHandlerOptionItem exceptionHandlerOptionGitHub;
+        private ExceptionHandlerOptionItem exceptionHandlerOptionTechInfo;
     }
 }

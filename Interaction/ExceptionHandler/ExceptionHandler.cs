@@ -107,6 +107,11 @@ namespace Utility.Interaction.ExceptionHandler
         {
             MessageBox.Show(prepareData());
         }
+        private void techinfoCopyCallback(object sender, EventArgs e)
+        {
+            Clipboard.SetText(prepareData());
+            MessageBox.Show("Copied to clipboard");
+        }
         #endregion
         
         protected void setupDialog(object sender, Exception e)
@@ -131,6 +136,9 @@ namespace Utility.Interaction.ExceptionHandler
 
             exceptionHandlerOptionTechInfo.Visible = _configuration.showTechnicalInformation;
             exceptionHandlerOptionTechInfo.setCallback(new EventHandler(techinfoCallback));
+         
+            exceptionHandlerOptionCopy.Visible = _configuration.showTechnicalInformation;
+            exceptionHandlerOptionCopy.setCallback(new EventHandler(techinfoCopyCallback));
 
 
         }

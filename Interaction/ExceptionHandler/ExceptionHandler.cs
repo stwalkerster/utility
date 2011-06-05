@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Net.Mail;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -65,6 +66,8 @@ namespace Utility.Interaction.ExceptionHandler
                 _configuration = new ExceptionHandlerConfiguration();
         }
 
+        #region callbacks
+
         private void bugtrackerCallback(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start(_configuration.bugTracker);
@@ -87,14 +90,25 @@ namespace Utility.Interaction.ExceptionHandler
 
         private void emailCallback(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            MailMessage mail = new MailMessage();
+            mail.From = new MailAddress("crashdump@helpmebot.org.uk");
+            mail.To.Add(_configuration.contactEmailAddress);
+            mail.Subject = "CrashDump for " + Application.ProductName;
+            mail.Body = prepareData();
+
+            SmtpClient client = new SmtpClient("mail.helpmebot.org.uk");
+
+            client.Send(mail);
+
+            MessageBox.Show("Sent email to " + _configuration.contactEmailAddress);
         }
 
         private void techinfoCallback(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            MessageBox.Show(prepareData());
         }
-
+        #endregion
+        
         protected void setupDialog(object sender, Exception e)
         {
             _exception = e;
@@ -121,6 +135,13 @@ namespace Utility.Interaction.ExceptionHandler
 
         }
 
+        protected string prepareData()
+        {
+            string formatString = "Sender: {0}\n\nException: {1}\n\nStack trace:\n{2}\n\nMessage: {3}\n\n";
 
+
+            return string.Format(formatString, _sender ?? "null", _exception.GetType(), _exception.StackTrace,
+                                 _exception.Message);
+        }
     }
 }

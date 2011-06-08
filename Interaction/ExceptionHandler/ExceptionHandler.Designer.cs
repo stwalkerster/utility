@@ -34,13 +34,13 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.optionListPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.exceptionHandlerOptionContinue = new Utility.Interaction.ExceptionHandler.ExceptionHandlerOptionItem();
-            this.exceptionHandlerOptionExit = new Utility.Interaction.ExceptionHandler.ExceptionHandlerOptionItem();
             this.exceptionHandlerOptionSendReport = new Utility.Interaction.ExceptionHandler.ExceptionHandlerOptionItem();
             this.exceptionHandlerOptionBugTracker = new Utility.Interaction.ExceptionHandler.ExceptionHandlerOptionItem();
             this.exceptionHandlerOptionGitHub = new Utility.Interaction.ExceptionHandler.ExceptionHandlerOptionItem();
             this.exceptionHandlerOptionTechInfo = new Utility.Interaction.ExceptionHandler.ExceptionHandlerOptionItem();
             this.exceptionHandlerOptionCopy = new Utility.Interaction.ExceptionHandler.ExceptionHandlerOptionItem();
+            this.exceptionHandlerOptionContinue = new Utility.Interaction.ExceptionHandler.ExceptionHandlerOptionItem();
+            this.exceptionHandlerOptionExit = new Utility.Interaction.ExceptionHandler.ExceptionHandlerOptionItem();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.optionListPanel.SuspendLayout();
@@ -131,28 +131,6 @@
             this.optionListPanel.Size = new System.Drawing.Size(608, 138);
             this.optionListPanel.TabIndex = 4;
             // 
-            // exceptionHandlerOptionContinue
-            // 
-            this.exceptionHandlerOptionContinue.ButtonColour = System.Drawing.Color.Honeydew;
-            this.exceptionHandlerOptionContinue.ButtonText = "Continue";
-            this.exceptionHandlerOptionContinue.Description = "Attempt to continue (could cause application instability and lost data)";
-            this.exceptionHandlerOptionContinue.Location = new System.Drawing.Point(3, 178);
-            this.exceptionHandlerOptionContinue.MaximumSize = new System.Drawing.Size(577, 29);
-            this.exceptionHandlerOptionContinue.Name = "exceptionHandlerOptionContinue";
-            this.exceptionHandlerOptionContinue.Size = new System.Drawing.Size(577, 29);
-            this.exceptionHandlerOptionContinue.TabIndex = 0;
-            // 
-            // exceptionHandlerOptionExit
-            // 
-            this.exceptionHandlerOptionExit.ButtonColour = System.Drawing.Color.MistyRose;
-            this.exceptionHandlerOptionExit.ButtonText = "Exit";
-            this.exceptionHandlerOptionExit.Description = "Exit the Application";
-            this.exceptionHandlerOptionExit.Location = new System.Drawing.Point(3, 213);
-            this.exceptionHandlerOptionExit.MaximumSize = new System.Drawing.Size(577, 29);
-            this.exceptionHandlerOptionExit.Name = "exceptionHandlerOptionExit";
-            this.exceptionHandlerOptionExit.Size = new System.Drawing.Size(577, 29);
-            this.exceptionHandlerOptionExit.TabIndex = 6;
-            // 
             // exceptionHandlerOptionSendReport
             // 
             this.exceptionHandlerOptionSendReport.ButtonColour = System.Drawing.Color.Honeydew;
@@ -207,6 +185,28 @@
             this.exceptionHandlerOptionCopy.Name = "exceptionHandlerOptionCopy";
             this.exceptionHandlerOptionCopy.Size = new System.Drawing.Size(577, 29);
             this.exceptionHandlerOptionCopy.TabIndex = 7;
+            // 
+            // exceptionHandlerOptionContinue
+            // 
+            this.exceptionHandlerOptionContinue.ButtonColour = System.Drawing.Color.Honeydew;
+            this.exceptionHandlerOptionContinue.ButtonText = "Continue";
+            this.exceptionHandlerOptionContinue.Description = "Attempt to continue (could cause application instability and lost data)";
+            this.exceptionHandlerOptionContinue.Location = new System.Drawing.Point(3, 178);
+            this.exceptionHandlerOptionContinue.MaximumSize = new System.Drawing.Size(577, 29);
+            this.exceptionHandlerOptionContinue.Name = "exceptionHandlerOptionContinue";
+            this.exceptionHandlerOptionContinue.Size = new System.Drawing.Size(577, 29);
+            this.exceptionHandlerOptionContinue.TabIndex = 0;
+            // 
+            // exceptionHandlerOptionExit
+            // 
+            this.exceptionHandlerOptionExit.ButtonColour = System.Drawing.Color.MistyRose;
+            this.exceptionHandlerOptionExit.ButtonText = "Exit";
+            this.exceptionHandlerOptionExit.Description = "Exit the Application";
+            this.exceptionHandlerOptionExit.Location = new System.Drawing.Point(3, 213);
+            this.exceptionHandlerOptionExit.MaximumSize = new System.Drawing.Size(577, 29);
+            this.exceptionHandlerOptionExit.Name = "exceptionHandlerOptionExit";
+            this.exceptionHandlerOptionExit.Size = new System.Drawing.Size(577, 29);
+            this.exceptionHandlerOptionExit.TabIndex = 6;
             // 
             // ExceptionHandler
             // 

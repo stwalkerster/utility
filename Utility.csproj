@@ -72,7 +72,9 @@
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Net\Authentication\OAuthBase.cs" />
+    <Compile Include="Net\Chat\IRC\IInternetRelayChat.cs" />
     <Compile Include="Net\Chat\Irc.cs" />
+    <Compile Include="Net\Chat\IRC\Replies.cs" />
     <Compile Include="Net\IPAddress.cs" />
     <Compile Include="Net\MediaWiki\MediaWikiSlaveLagException.cs" />
     <Compile Include="Net\MediaWiki\DeleteToken.cs" />

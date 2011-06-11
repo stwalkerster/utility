@@ -160,6 +160,31 @@ namespace Utility.Net.Chat.InternetRelayChat
         void info();
         void info(string target);
 
+        void servlist();
+        void servlist(string mask);
+        void servlist(string mask, string type);
+
+        void squery(string servicename, string text);
+
+        void who();
+        void who(string mask, bool opsonly = false);
+
+        void whois(string targetserver, params string[] mask);
+
+        void whowas(params string[] nicknames);
+        void whowas(int count, params string[] nicknames);
+        void whowas(string targetserver, int count, params string[] nicknames);
+
+        void kill(string nickname, string comment);
+
+        void ping(string server1);
+        void ping(string server1, string server2);
+
+        void pong(string server1);
+        void pong(string server1, string server2);
+
+        void error(string message);
+
 
     }
 }

@@ -115,6 +115,51 @@ namespace Utility.Net.Chat.InternetRelayChat
 
         void invite(string nickname, string channel);
 
+        void kick(string channel, string comment, params string[] users);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="comment"></param>
+        /// <param name="channelusers">key as channel, value as user</param>
+        void kick(string comment, params KeyValuePair<string, string>[] channelusers);
+
+        void privmsg(string target, string text);
+
+        void notice(string target, string text);
+
+        void motd();
+        void motd(string targetserver);
+
+        void lusers();
+        void lusers(string mask);
+        void lusers(string mask, string target);
+
+        void version();
+        void version(string target);
+
+        void stats();
+        void stats(string query);
+        void stats(string query, string target);
+
+        void links();
+        void links(string servermask);
+        void links(string remoteserver, string servermask);
+
+        void time();
+        void time(string target);
+
+        void connect(string targetserver, int port);
+        void connect(string targetserver, int port, int remoteserver);
+
+        void trace();
+        void trace(string target);
+
+        void admin();
+        void admin(string target);
+
+        void info();
+        void info(string target);
+
 
     }
 }

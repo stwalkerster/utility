@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Utility.Net.Chat.InternetRelayChat
 {
@@ -185,6 +183,26 @@ namespace Utility.Net.Chat.InternetRelayChat
 
         void error(string message);
 
+        void away(string message);
+        void away();
 
+        void rehash();
+
+        void die();
+
+        void restart();
+
+        void summon(string user);
+        void summon(string user, string target);
+        void summon(string user, string target, string channel);
+
+        void users();
+        void users(string target);
+
+        void wallops(string message);
+
+        void userhost(params string[] nickname);
+
+        void ison(params string[] nickname);
     }
 }

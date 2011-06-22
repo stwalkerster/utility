@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle( "ConsoleMenu" )]
-[assembly: AssemblyDescription( "" )]
+[assembly: AssemblyTitle("Utility Library")]
+[assembly: AssemblyDescription("Stwalkerster's main library of functions")]
 [assembly: AssemblyConfiguration( "" )]
-[assembly: AssemblyCompany( "" )]
-[assembly: AssemblyProduct( "ConsoleMenu" )]
+[assembly: AssemblyCompany("Simon Walker")]
+[assembly: AssemblyProduct("Utility")]
 [assembly: AssemblyCopyright( "Copyright ©  2009" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]

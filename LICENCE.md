@@ -1,5 +1,7 @@
 # Project Licence (MIT Licence)
 
+Unless otherwise specified on a file-by-file basis:
+
 Copyright (c) 2011 Simon Walker
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

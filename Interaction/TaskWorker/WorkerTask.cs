@@ -33,5 +33,14 @@ namespace Utility.Interaction.TaskWorker
         {
             _task.DynamicInvoke(_dataObject);
         }
+
+        /// <summary>
+        /// Returns the description of this task.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return _description;
+        }
     }
 }

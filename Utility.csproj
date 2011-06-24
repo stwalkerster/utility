@@ -82,6 +82,7 @@
     <Compile Include="Interaction\TaskWorker\WorkerTask.cs" />
     <Compile Include="Interaction\TaskWorker\WorkerTaskParameters.cs" />
     <Compile Include="Net\Authentication\OAuthBase.cs" />
+    <Compile Include="Net\Chat\IRC\FloodDetection\FloodPrevention.cs" />
     <Compile Include="Net\Chat\IRC\IInternetRelayChatClientProtocol.cs" />
     <Compile Include="Net\Chat\Irc.cs" />
     <Compile Include="Net\Chat\IRC\Replies.cs" />

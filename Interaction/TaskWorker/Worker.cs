@@ -28,7 +28,7 @@ namespace Utility.Interaction.TaskWorker
 
         public void DoWork(params WorkerTask[] tasks)
         {
-            if (backgroundWorker1.IsBusy)
+            if (!backgroundWorker1.IsBusy)
             {// append, display, start
                 foreach (var workerTask in tasks)
                 {

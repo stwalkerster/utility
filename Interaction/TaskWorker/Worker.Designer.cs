@@ -75,6 +75,7 @@
             this.progressBar1.Maximum = 0;
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(644, 23);
+            this.progressBar1.Step = 1;
             this.progressBar1.TabIndex = 1;
             // 
             // progressBar2

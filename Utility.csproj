@@ -83,7 +83,11 @@
     <Compile Include="Interaction\TaskWorker\WorkerTaskParameters.cs" />
     <Compile Include="Net\Authentication\OAuthBase.cs" />
     <Compile Include="Net\Chat\InternetRelayChat\FloodDetection\FloodPrevention.cs" />
+    <Compile Include="Net\Chat\InternetRelayChat\IrcClient.OperCommands.cs" />
     <Compile Include="Net\Chat\InternetRelayChat\IInternetRelayChatClientProtocol.cs" />
+    <Compile Include="Net\Chat\InternetRelayChat\IrcClient.ClientCommands.cs" />
+    <Compile Include="Net\Chat\InternetRelayChat\IrcClient.cs" />
+    <Compile Include="Net\Chat\InternetRelayChat\IrcClient.Internal.cs" />
     <Compile Include="Net\Chat\Irc.cs" />
     <Compile Include="Net\Chat\InternetRelayChat\Replies.cs" />
     <Compile Include="Net\IPAddress.cs" />

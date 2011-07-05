@@ -82,10 +82,10 @@
     <Compile Include="Interaction\TaskWorker\WorkerTask.cs" />
     <Compile Include="Interaction\TaskWorker\WorkerTaskParameters.cs" />
     <Compile Include="Net\Authentication\OAuthBase.cs" />
-    <Compile Include="Net\Chat\IRC\FloodDetection\FloodPrevention.cs" />
-    <Compile Include="Net\Chat\IRC\IInternetRelayChatClientProtocol.cs" />
+    <Compile Include="Net\Chat\InternetRelayChat\FloodDetection\FloodPrevention.cs" />
+    <Compile Include="Net\Chat\InternetRelayChat\IInternetRelayChatClientProtocol.cs" />
     <Compile Include="Net\Chat\Irc.cs" />
-    <Compile Include="Net\Chat\IRC\Replies.cs" />
+    <Compile Include="Net\Chat\InternetRelayChat\Replies.cs" />
     <Compile Include="Net\IPAddress.cs" />
     <Compile Include="Net\MediaWiki\MediaWikiSlaveLagException.cs" />
     <Compile Include="Net\MediaWiki\DeleteToken.cs" />

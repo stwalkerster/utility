@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 
 namespace Utility.Net.Chat.InternetRelayChat
 {
@@ -11,6 +12,10 @@ namespace Utility.Net.Chat.InternetRelayChat
     ///</summary>
     public partial class IrcClient : IInternetRelayChatClientProtocol
     {
+
+        public event EventHandler<EventHandlers.DataAvailableEventArgs> dataAvailableEvent;
+
+
         /// <summary>
         /// Creates a new IRC client
         /// </summary>
@@ -36,6 +41,7 @@ namespace Utility.Net.Chat.InternetRelayChat
         /// Connects to the IRC Network
         /// </summary>
         /// <exception cref="System.Net.Sockets.SocketException" />
+        /// <exception cref="ArgumentException" />
         /// <exception cref="ArgumentNullException"/>
         /// <exception cref="ArgumentOutOfRangeException" />
         /// <exception cref="ObjectDisposedException" />
@@ -46,9 +52,10 @@ namespace Utility.Net.Chat.InternetRelayChat
             if (!_tcpClient.Connected) throw new SocketException();
 
             _stream = _tcpClient.GetStream();
+ 
+            sr = new StreamReader(_stream);
 
-           
-            
+            readerThread = new Thread(readerThreadMethod);
         }
 
     }

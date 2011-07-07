@@ -30,7 +30,7 @@ namespace Utility.Net.Chat.InternetRelayChat
 
         private Queue<string> _messageQueue = new Queue<string>(),
                               _urgentMessageQueue = new Queue<string>();
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -65,7 +65,10 @@ namespace Utility.Net.Chat.InternetRelayChat
         /// <exception cref="SecurityException"/>
         private void send(string message, bool urgent = false)
         {
-            (urgent ? _urgentMessageQueue : _messageQueue).Enqueue(message);
+            lock (this)
+            {
+                (urgent ? _urgentMessageQueue : _messageQueue).Enqueue(message);
+            }
 
             if (writerThread.ThreadState == ThreadState.WaitSleepJoin)
             {
@@ -84,12 +87,14 @@ namespace Utility.Net.Chat.InternetRelayChat
         {
             try
             {
-                if (_urgentMessageQueue.Count != 0)
-                    return _urgentMessageQueue.Dequeue();
+                lock (this)
+                {
+                    if (_urgentMessageQueue.Count != 0)
+                        return _urgentMessageQueue.Dequeue();
 
-                if (_messageQueue.Count != 0)
-                    return _messageQueue.Dequeue();
-
+                    if (_messageQueue.Count != 0)
+                        return _messageQueue.Dequeue();
+                }
             }
             catch (InvalidOperationException)
             {

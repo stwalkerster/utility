@@ -68,5 +68,14 @@ namespace Utility.Net.Chat.InternetRelayChat
         /// Gets a value indicating whether the underlying socket is connected.
         /// </summary>
         public bool Connected { get { return _tcpClient.Connected; } }
+    
+        /// <summary>
+        /// sends a raw message to the IRC feed. No result will be returned from this.
+        /// </summary>
+        /// <param name="message">the raw irc message to send.</param>
+        public void clientSendRawMessage (string message)
+        {
+            send(message);
+        }
     }
 }

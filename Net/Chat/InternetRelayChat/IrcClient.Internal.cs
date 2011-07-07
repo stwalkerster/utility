@@ -25,6 +25,9 @@ namespace Utility.Net.Chat.InternetRelayChat
 
         private Thread readerThread;
 
+        private Queue<string> _messageQueue = new Queue<string>(),
+                              _urgentMessageQueue = new Queue<string>();
+
         /// <summary>
         /// 
         /// </summary>
@@ -51,10 +54,17 @@ namespace Utility.Net.Chat.InternetRelayChat
             }
         }
 
-        private void send(bool urgent = false)
+        /// <summary>
+        /// internal message queueing method
+        /// </summary>
+        /// <param name="message">message to send</param>
+        /// <param name="urgent">skip the default queue?</param>
+        private void send(string message, bool urgent = false)
         {
-            
+            (urgent ? _urgentMessageQueue : _messageQueue).Enqueue(message);
         }
+
+
 
     }
 }

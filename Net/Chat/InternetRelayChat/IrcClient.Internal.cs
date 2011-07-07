@@ -64,7 +64,11 @@ namespace Utility.Net.Chat.InternetRelayChat
             (urgent ? _urgentMessageQueue : _messageQueue).Enqueue(message);
         }
 
-
-
+        private string getMessageToSend()
+        {
+            return _urgentMessageQueue.Count != 0
+                       ? _urgentMessageQueue.Dequeue()
+                       : _messageQueue.Dequeue();
+        }
     }
 }

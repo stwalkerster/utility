@@ -86,6 +86,7 @@
     <Compile Include="Net\Chat\InternetRelayChat\EventHandlers\DataAvailableEventArgs.cs" />
     <Compile Include="Net\Chat\InternetRelayChat\EventHandlers\IrcEventArgs.cs" />
     <Compile Include="Net\Chat\InternetRelayChat\FloodDetection\FloodPrevention.cs" />
+    <Compile Include="Net\Chat\InternetRelayChat\FloodDetection\SimpleTimerFloodPrevention.cs" />
     <Compile Include="Net\Chat\InternetRelayChat\IrcClient.OperCommands.cs" />
     <Compile Include="Net\Chat\InternetRelayChat\IInternetRelayChatClientProtocol.cs" />
     <Compile Include="Net\Chat\InternetRelayChat\IrcClient.ClientCommands.cs" />

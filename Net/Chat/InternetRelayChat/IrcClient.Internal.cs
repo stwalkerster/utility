@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
+using System.Security;
 using System.Text;
 using System.Threading;
 using Utility.Net.Chat.InternetRelayChat.EventHandlers;
@@ -61,11 +62,21 @@ namespace Utility.Net.Chat.InternetRelayChat
         /// </summary>
         /// <param name="message">message to send</param>
         /// <param name="urgent">skip the default queue?</param>
+        /// <exception cref="SecurityException"/>
         private void send(string message, bool urgent = false)
         {
             (urgent ? _urgentMessageQueue : _messageQueue).Enqueue(message);
+
+            // throws SecurityException
+            writerThread.Interrupt();
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException" />
         private string getMessageToSend()
         {
             try
@@ -86,6 +97,12 @@ namespace Utility.Net.Chat.InternetRelayChat
             return string.Empty;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="ObjectDisposedException" />
+        /// <exception cref="IOException" />
+        /// <exception cref="System.Text.EncoderFallbackException" />
         private void writerThreadMethod()
         {
             FloodPrevention fp = (FloodPrevention)Activator.CreateInstance(this.floodprotection);
@@ -101,10 +118,25 @@ namespace Utility.Net.Chat.InternetRelayChat
                     continue;
                 }
 
-                fp.wait(messageToSend);
+                try
+                {
+                    fp.wait(messageToSend);
 
-                sw.WriteLine(messageToSend);
-                sw.Flush();
+                    sw.WriteLine(messageToSend);
+                    sw.Flush();
+                }
+                catch(ObjectDisposedException)
+                {
+                    throw;
+                }
+                catch(IOException)
+                {
+                    throw;
+                }
+                catch(System.Text.EncoderFallbackException)
+                {
+                    throw;
+                }
             }
         }
     }

@@ -5,6 +5,6 @@ namespace Utility.Net.Chat.InternetRelayChat.FloodDetection
         /// <summary>
         /// synchronous method to force the IRC client to wait if required
         /// </summary>
-        public abstract void wait();
+        public abstract void wait(string message);
     }
 }

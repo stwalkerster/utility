@@ -4,6 +4,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using Utility.Net.Chat.InternetRelayChat.Exceptions;
 
 namespace Utility.Net.Chat.InternetRelayChat
 {
@@ -47,6 +48,11 @@ namespace Utility.Net.Chat.InternetRelayChat
         /// <exception cref="ObjectDisposedException" />
         public void clientConnect()
         {
+            if(_tcpClient.Connected)
+            {
+                throw new AlreadyConnectedException();
+            }
+
             _tcpClient.Connect(_serverHostname, _serverPort);
 
             if (!_tcpClient.Connected) throw new SocketException();
@@ -58,5 +64,9 @@ namespace Utility.Net.Chat.InternetRelayChat
             readerThread = new Thread(readerThreadMethod);
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the underlying socket is connected.
+        /// </summary>
+        public bool Connected { get { return _tcpClient.Connected; } }
     }
 }

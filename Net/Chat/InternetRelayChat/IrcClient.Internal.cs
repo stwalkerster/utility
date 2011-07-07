@@ -67,8 +67,11 @@ namespace Utility.Net.Chat.InternetRelayChat
         {
             (urgent ? _urgentMessageQueue : _messageQueue).Enqueue(message);
 
-            // throws SecurityException
-            writerThread.Interrupt();
+            if (writerThread.ThreadState == ThreadState.WaitSleepJoin)
+            {
+                // throws SecurityException
+                writerThread.Interrupt();
+            }
         }
 
 

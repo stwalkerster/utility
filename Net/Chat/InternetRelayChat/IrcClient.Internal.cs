@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using Utility.Net.Chat.InternetRelayChat.EventHandlers;
+using Utility.Net.Chat.InternetRelayChat.FloodDetection;
 
 namespace Utility.Net.Chat.InternetRelayChat
 {
@@ -22,12 +23,13 @@ namespace Utility.Net.Chat.InternetRelayChat
         private NetworkStream _stream;
 
         private StreamReader sr;
+        private StreamWriter sw;
 
-        private Thread readerThread;
+        private Thread readerThread, writerThread;
 
         private Queue<string> _messageQueue = new Queue<string>(),
                               _urgentMessageQueue = new Queue<string>();
-
+        
         /// <summary>
         /// 
         /// </summary>
@@ -84,6 +86,26 @@ namespace Utility.Net.Chat.InternetRelayChat
             return string.Empty;
         }
 
+        private void writerThreadMethod()
+        {
+            FloodPrevention fp = (FloodPrevention)Activator.CreateInstance(this.floodprotection);
 
+            while(_tcpClient.Connected)
+            {
+                string messageToSend = getMessageToSend();
+
+                if(messageToSend == string.Empty)
+                {
+                    // block until we have something to do.
+                    Thread.Sleep(0);
+                    continue;
+                }
+
+                fp.wait(messageToSend);
+
+                sw.WriteLine(messageToSend);
+                sw.Flush();
+            }
+        }
     }
 }

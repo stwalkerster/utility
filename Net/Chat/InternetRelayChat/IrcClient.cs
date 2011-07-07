@@ -16,6 +16,7 @@ namespace Utility.Net.Chat.InternetRelayChat
 
         public event EventHandler<EventHandlers.DataAvailableEventArgs> dataAvailableEvent;
 
+        public Type floodprotection;
 
         /// <summary>
         /// Creates a new IRC client
@@ -60,8 +61,11 @@ namespace Utility.Net.Chat.InternetRelayChat
             _stream = _tcpClient.GetStream();
  
             sr = new StreamReader(_stream);
+            sw = new StreamWriter(_stream);
 
             readerThread = new Thread(readerThreadMethod);
+            writerThread = new Thread(writerThreadMethod);
+            
         }
 
         /// <summary>

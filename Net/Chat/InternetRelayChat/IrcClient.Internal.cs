@@ -66,9 +66,24 @@ namespace Utility.Net.Chat.InternetRelayChat
 
         private string getMessageToSend()
         {
-            return _urgentMessageQueue.Count != 0
-                       ? _urgentMessageQueue.Dequeue()
-                       : _messageQueue.Dequeue();
+            try
+            {
+                if (_urgentMessageQueue.Count != 0)
+                    return _urgentMessageQueue.Dequeue();
+
+                if (_messageQueue.Count != 0)
+                    return _messageQueue.Dequeue();
+
+            }
+            catch (InvalidOperationException)
+            {
+                //TODO: handle gracefully.
+                throw;
+            }
+
+            return string.Empty;
         }
+
+
     }
 }

@@ -14,8 +14,14 @@ namespace Utility.Net.Chat.InternetRelayChat
     public partial class IrcClient : IInternetRelayChatClientProtocol
     {
 
+        /// <summary>
+        /// Event which is called when there is data available for the client to handle
+        /// </summary>
         public event EventHandler<EventHandlers.DataAvailableEventArgs> dataAvailableEvent;
 
+        /// <summary>
+        /// Type of the flood protection engine to use.
+        /// </summary>
         public Type floodprotection;
 
         /// <summary>

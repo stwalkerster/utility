@@ -80,7 +80,6 @@
       <DependentUpon>Worker.cs</DependentUpon>
     </Compile>
     <Compile Include="Interaction\TaskWorker\WorkerTask.cs" />
-    <Compile Include="Interaction\TaskWorker\WorkerTaskParameters.cs" />
     <Compile Include="Net\Authentication\OAuthBase.cs" />
     <Compile Include="Net\Chat\InternetRelayChat\Exceptions\AlreadyConnectedException.cs" />
     <Compile Include="Net\Chat\InternetRelayChat\EventHandlers\DataAvailableEventArgs.cs" />

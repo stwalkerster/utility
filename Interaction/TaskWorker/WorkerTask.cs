@@ -10,8 +10,8 @@ namespace Utility.Interaction.TaskWorker
     public class WorkerTask
     {
         private string _description;
-        private Action<WorkerTaskParameters> _task;
-        private WorkerTaskParameters _dataObject;
+        private Action<object> _task;
+        private object _dataObject;
 
         /// <summary>
         /// Creates a new task definition object for the TaskWorker
@@ -19,7 +19,7 @@ namespace Utility.Interaction.TaskWorker
         /// <param name="description">Human-readable description (help text) for the task.</param>
         /// <param name="task">Callback method to run.</param>
         /// <param name="dataObject">An object containing the parameters of the task</param>
-        public WorkerTask(string description, Action<WorkerTaskParameters> task, WorkerTaskParameters dataObject)
+        public WorkerTask(string description, Action<object> task, object dataObject = null)
         {
             _dataObject = dataObject;
             _task = task;

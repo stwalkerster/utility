@@ -10,7 +10,14 @@ namespace Utility.Interaction.TaskWorker
 {
     public partial class Worker : Form
     {
-        public Worker()
+        public static Worker getInstance()
+        {
+            return _instance ?? (_instance = new Worker());
+        }
+
+        private static Worker _instance;
+
+        protected Worker()
         {
             InitializeComponent();
         }

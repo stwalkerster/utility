@@ -2,106 +2,239 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Xml;
+using System.Xml.XPath;
+
 namespace Utility
 {
+    /// <summary>
+    /// Provides an interface for using the .hmbot configuration files
+    /// </summary>
     public class DotHmbotConfigurationFile
     {
-        string host, user, password, db;
-        uint port;
+        /// <summary>
+        /// XML Root namespace/schema/something...
+        /// </summary>
+        public const string NS_ROOT = "";
 
-        public DotHmbotConfigurationFile( string filename )
+        /// <summary>
+        /// MySQL constants for use with the configuration. Provided for backwards compatiability
+        /// </summary>
+        public const string MYSQL_SERVER = "mySqlServerHostname",
+                            MYSQL_PORT = "mySqlServerPort",
+                            MYSQL_USERNAME = "mySqlUsername",
+                            MYSQL_PASSWORD = "mySqlPassword",
+                            MYSQL_SCHEMA = "mySqlSchema";
+
+        private string filename = "";
+        readonly Dictionary<string,string > _store = new Dictionary<string, string>();
+
+        private void readVer1ConfigFile()
         {
-                StreamReader settingsreader = new StreamReader( filename );
-                mySqlServerHostname = settingsreader.ReadLine( );
-                mySqlServerPort = uint.Parse( settingsreader.ReadLine( ) );
-                mySqlUsername = settingsreader.ReadLine( );
-                mySqlPassword = settingsreader.ReadLine( );
-                mySqlSchema = settingsreader.ReadLine( );
-                settingsreader.Close( );
+            StreamReader settingsreader = new StreamReader(filename);
+            this[MYSQL_SERVER] = settingsreader.ReadLine();
+            this[MYSQL_PORT] =settingsreader.ReadLine();
+            this[MYSQL_USERNAME] = settingsreader.ReadLine();
+            this[MYSQL_PASSWORD] = settingsreader.ReadLine();
+            this[MYSQL_SCHEMA] = settingsreader.ReadLine();
+            settingsreader.Close();
+
         }
-        private DotHmbotConfigurationFile( )
+      
+        private DotHmbotConfigurationFile()
         {
-        }
-        public void save( string filename )
-        {
-            StreamWriter sw = new StreamWriter( filename );
-            sw.WriteLine( mySqlServerHostname );
-            sw.WriteLine( mySqlServerPort.ToString( ) );
-            sw.WriteLine( mySqlUsername );
-            sw.WriteLine( mySqlPassword );
-            sw.WriteLine( mySqlSchema );
-            sw.Close( );
         }
 
+
+
+        ///<summary>
+        /// Setting store
+        ///</summary>
+        ///<param name="key">Setting name</param>
+        public string this[string key]
+        {
+            get
+            {
+                return _store[key];
+            }
+            set
+            {
+                _store[key] = value;
+            }
+        }
+    
+        public static DotHmbotConfigurationFile Create(string filename, string serverHostname, uint serverPort,
+                                        string username, string password, string schema)
+        {
+            DotHmbotConfigurationFile x = new DotHmbotConfigurationFile {filename = filename};
+            x[MYSQL_SERVER] = serverHostname;
+            x[MYSQL_PORT] = serverPort.ToString();
+            x[MYSQL_USERNAME] = username;
+            x[MYSQL_PASSWORD] = password;
+            x[MYSQL_SCHEMA] = schema;
+
+            x.save();
+
+            return x;
+        }
+
+        public static DotHmbotConfigurationFile Create(string filename)
+        {
+            DotHmbotConfigurationFile x = new DotHmbotConfigurationFile {filename = filename};
+
+            x.save();
+
+            return x;
+        }
+
+        public static DotHmbotConfigurationFile Open(string filename)
+        {
+            DotHmbotConfigurationFile x = new DotHmbotConfigurationFile {filename = filename};
+
+
+            StreamReader sr = new StreamReader(filename);
+            string lineone = sr.ReadLine();
+            sr.Close();
+
+            if (lineone.Contains("<?xml"))
+            {
+                x.readXmlConfigFile();
+            }
+            else
+            {
+                x.readVer1ConfigFile();
+            }
+
+            return x;
+        }
+
+        private void readXmlConfigFile()
+        {
+            XPathDocument xpd = new XPathDocument(filename);
+            XPathNavigator xpn = xpd.CreateNavigator();
+            XPathNodeIterator xpni = xpn.Select("/hmbot[@version='2']/config/option");
+            while (xpni.MoveNext())
+            {
+                _store[xpni.Current.GetAttribute("name", "")] = xpni.Current.Value;
+            }
+        }
+
+        public void save()
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.AppendChild(doc.CreateXmlDeclaration("1.0", null, null));
+            XmlElement hmbot = doc.CreateElement("hmbot", NS_ROOT);
+            XmlElement config = doc.CreateElement("config");
+            hmbot.SetAttribute("version", "2");
+            hmbot.AppendChild(config);
+            doc.AppendChild(hmbot);
+
+            foreach (KeyValuePair<string, string> item in _store)
+            {
+                XmlElement option = doc.CreateElement("option");
+                option.SetAttribute("name", item.Key);
+                option.AppendChild(doc.CreateTextNode(item.Value));
+                config.AppendChild(option);
+            }
+
+            XmlTextWriter xtw = new XmlTextWriter(filename, Encoding.ASCII) {Formatting = Formatting.Indented};
+            doc.WriteTo(xtw);
+            xtw.Flush();
+            xtw.Close();
+        }
+
+        #region obsolete stuff
+
+        [Obsolete]
+        public void save(string ver1Filename)
+        {
+            save();
+        }
+
+        [Obsolete]
+        public DotHmbotConfigurationFile(string filename)
+        {
+            this.filename = filename;
+            StreamReader sr = new StreamReader(filename);
+            string lineone = sr.ReadLine();
+            sr.Close();
+
+            if (lineone.Contains("<?xml"))
+            {
+                readXmlConfigFile();
+            }
+            else
+            {
+                readVer1ConfigFile();
+            }
+
+        }
+
+        [Obsolete]
         public string mySqlServerHostname
         {
             get
             {
-                return host;
+                return this[MYSQL_SERVER];
             }
             set
             {
-                host = value;
+                this[MYSQL_SERVER] = value;
             }
         }
+
+        [Obsolete]
         public uint mySqlServerPort
         {
             get
             {
-                return port;
+                return uint.Parse(this[MYSQL_PORT]);
             }
             set
             {
-                port = value;
+                this[MYSQL_PORT] = value.ToString();
             }
         }
+
+        [Obsolete]
         public string mySqlUsername
         {
             get
             {
-                return user;
+                return this[MYSQL_USERNAME];
             }
             set
             {
-                user = value;
+                this[MYSQL_USERNAME] = value;
             }
         }
+
+        [Obsolete]
         public string mySqlPassword
         {
             get
             {
-                return password;
+                return this[MYSQL_PASSWORD];
             }
             set
             {
-                password = value;
+                this[MYSQL_PASSWORD] = value;
             }
         }
+
+        [Obsolete]
         public string mySqlSchema
         {
             get
             {
-                return db;
+                return this[MYSQL_SCHEMA];
             }
             set
             {
-                db = value;
+                this[MYSQL_SCHEMA] = value;
             }
         }
 
-        public static DotHmbotConfigurationFile Create( string filename, string serverHostname, uint serverPort,
-                                                string username, string password, string schema )
-        {
-            DotHmbotConfigurationFile x = new DotHmbotConfigurationFile( );
-            x.mySqlPassword = password;
-            x.mySqlSchema = schema;
-            x.mySqlServerHostname = serverHostname;
-            x.mySqlServerPort = serverPort;
-            x.mySqlUsername = username;
-
-            x.save( filename );
-
-            return new DotHmbotConfigurationFile( filename );
-        }
+        #endregion
     }
 }

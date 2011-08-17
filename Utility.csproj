@@ -135,6 +135,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\core.png" />
+    <None Include="DotHmbotConfigurationSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Net\Chat\InternetRelayChat\BotFramework\" />

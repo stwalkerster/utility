@@ -38,6 +38,12 @@
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>strong-signing-key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
@@ -138,6 +144,7 @@
     <None Include="DotHmbotConfigurationSchema.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="strong-signing-key.snk" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Net\Chat\InternetRelayChat\BotFramework\" />
